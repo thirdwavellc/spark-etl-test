@@ -16,7 +16,7 @@ class Member
     @client_name = Faker::Company.name
     @field = 'MEM'
     @run_date = Date.today.strftime("%Y%m%d")
-    @employee_ssn = use_ssn? ? Faker::IDNumber.valid : ''
+    @employee_ssn = percent_chance?(20) ? Faker::IDNumber.valid : ''
     @member_ssn = @employee_ssn
     @rel_to_subscriber = 0
     @last_name = Faker::Name.last_name
@@ -47,21 +47,11 @@ class Member
 
   private
 
-  def use_ssn?
-    @use_ssn ||= percent_chance? 20
-  end
-
   def percent_chance?(num)
     Faker::Number.between(1, 100) <= num
   end
 end
 
-members = (1..15000).map do
-  Member.new
-end
+members = (1..15000).map { Member.new }
 
-File.open('eligibility-sample.txt', 'w') do |file|
-  members.each do |member|
-    file.write(member.to_psv)
-  end
-end
+File.open('eligibility-sample.txt', 'w') { |file| members.each { |member| file.write(member.to_psv) } }
