@@ -2,6 +2,7 @@ import datetime
 import random
 from functools import reduce
 from faker import Faker
+import numpy as np
 
 now = datetime.datetime.now()
 fake = Faker()
@@ -71,16 +72,21 @@ class Group:
 
     def __generate_subscribers(self, num_subscribers):
         while self.total_members() < num_subscribers:
-            self.subscribers.append(Subscriber(self))
+            random_number = random.randint(0, 99)
+            if random_number <=1:
+                self.subscribers.append(Subscriber(self))
+                self.subscribers.append(Subscriber(self))
+            else:
+                self.subscribers.append(Subscriber(self))
 
 # TODO: include new enrollment year records
-# TODO: include duplicate entries
+
 class Subscriber:
     COVERAGE_LEVELS = ['EO', 'ES', 'EC', 'EF']
 
     def __init__(self, group):
         self.group = group
-        self.coverage_level = random.choice(self.COVERAGE_LEVELS)
+        self.coverage_level = np.random.choice(self.COVERAGE_LEVELS,1,p=[0.28, 0.17,0.17,0.38])[0]
         self.benefit_type = 'Medical'
         self.ins_subscriber_id = '' if self.group.client.uses_ssn else fake.bban()
         self.plan = random.choice(self.group.PLANS)
@@ -90,31 +96,43 @@ class Subscriber:
         self.coverage_end_date = self.coverage_start_date.replace(year=self.coverage_start_date.year + 1, month=self.coverage_start_date.month - 1, day=1)
         self.coverage_status = self.coverage_start_date <= now.date() <= self.coverage_end_date
         self.employee = Member(self, 0, '001')
-        self.dependants = self.__generate_dependants()
+        self.dependants = self.generate_dependants()
         self.members = [self.employee] + self.dependants
 
     def total_members(self):
         return len(self.members)
 
-    def __generate_dependants(self):
+    def generate_dependants(self):
+
+        eflist  = np.random.choice([[Member(self, 1, '002'), Member(self, 2, '003')],[Member(self, 1, '002'), Member(self, 2, '003'),Member(self, 2, '004')],
+        [Member(self, 1, '002'), Member(self, 2, '003'),Member(self, 2, '004'),Member(self, 2, '005')],[Member(self, 1, '002'), Member(self, 2, '003'),Member(self, 2, '004'),Member(self, 2, '005'),
+        Member(self, 2, '006')]],1,p=[.40,.34,.16,.10])[0]
+
         return {
             'EO': [],
             'ES': [Member(self, 1, '002')],
             'EC': [Member(self, 2, '002')],
-            'EF': [Member(self, 1, '002'), Member(self, 2, '003')] # TODO: generate 0-1 spouses and 1+ children
+            'EF': eflist
+
         }[self.coverage_level]
+
+
 
 class Member:
     def __init__(self, subscriber, rel_to_subscriber, subscriber_num):
         self.subscriber = subscriber
         self.rel_to_subscriber = rel_to_subscriber
-        self.last_name = fake.last_name() # TODO: make dependants last name match
+        if self.rel_to_subscriber==0:
+            self.last_name = fake.last_name()
+        else:
+            self.last_name = self.subscriber.employee.last_name
         self.first_name = fake.first_name()
         self.date_of_birth = fake.date_between(start_date='-58y', end_date='-18y')
         self.gender = 'M' if percent_chance(50) else 'F'
         self.ssn = fake.ssn() if self.subscriber.group.client.uses_ssn else ''
         self.member_id = '' if self.subscriber.group.client.uses_ssn else self.subscriber.ins_subscriber_id + ' ' + subscriber_num
-        self.email = fake.email() # TODO: make this match their name
+        mail_extension = np.random.choice(["@gmail.com","@yahoo.com","@hotmail.com","@aol.com"])
+        self.email = self.first_name + self.last_name + mail_extension 
         self.address_line_1 = fake.street_address() if self.is_employee() else ''
         self.address_line_2 = fake.secondary_address() if self.is_employee() and percent_chance(30) else ''
         self.city = fake.city() if self.is_employee() else ''
@@ -155,6 +173,8 @@ class Member:
             str(self.zipcode)
         ]) + '\n'
 
-sample_client = Client(num_groups=25, num_subscribers=15000, uses_ssn=False)
+
+sample_client = Client(num_groups=25, num_subscribers=1500, uses_ssn=False)
 sample_eligibility_file = EligibilityFile(sample_client)
+
 sample_eligibility_file.write('eligibility-sample.txt')
