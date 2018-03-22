@@ -133,13 +133,13 @@ class Member:
         self.rel_to_subscriber = rel_to_subscriber
         if self.rel_to_subscriber==0:
             self.last_name = fake.last_name()
-            self.last_name = add_random_space(100,self.last_name)
+            self.last_name = add_random_space(1,self.last_name)
         else:
             self.last_name = self.subscriber.employee.last_name
-            self.last_name = add_random_space(100,self.last_name)
+            self.last_name = add_random_space(1,self.last_name)
 
         self.first_name = fake.first_name()
-        self.first_name = add_random_space(100,self.first_name)
+        self.first_name = add_random_space(1,self.first_name)
         self.date_of_birth = fake.date_between(start_date='-58y', end_date='-18y')
         self.rel_to_subscriber==2:
             self.date_of_birth = fake.date_between(start_date='-38y', end_date='-18y')

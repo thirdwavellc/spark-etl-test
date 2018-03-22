@@ -18,10 +18,9 @@ import normalize
 
 
 
-
-
 def main():
     '''Program entry point'''
+
 
     spark = SparkSession\
         .builder\
@@ -37,20 +36,46 @@ def main():
         .load(data_file())
 
 
-    column_names = df.schema.names
-    val_list = df.collect()
-    new_list = []
-    for i in range(0,len(val_list)-1):
 
-        new_list.append(normalize.normalize_list(val_list[i],column_names))
+    data_frame_object = df.collect()
+
+    #Possible array for the normalization functions
+    normalize_functions=[]
+
+    #Create a new list to insert our custom row objects into
+    custom_row_list = []
+
+    #Loop thought the data frame object and go through each row
+    for i in range(0,len(data_frame_object)):
+
+        spark_row_object = data_frame_object[i]
+
+        #Create a new Custom Row Object using
+        cr=normalize.customRow(spark_row_object,eligibility_schema())
+
+
+        #Normalizing data
+        cr.dictionary['first_name'] = normalize.normalize_first_name(cr.dictionary['first_name'])
+        cr.dictionary['last_name'] = normalize.normalize_last_name(cr.dictionary['last_name'])
+        cr.dictionary['email'] = normalize.normalize_email(cr.dictionary['email'])
+        print("ere")
+        print(cr.dictionary['state'])
+        cr.dictionary['state'] = normalize.uppercase_state(cr.dictionary['state'])
+
+        #This will put the object into an array version
+        #array_version=x.to_array(eligibility_schema())
+
+        custom_row_list.append(cr.dictionary)
+
+
 
 
     #TO-DO Code something that creates a folder instead of relying on already having that folder there
 
     i = 0
-    while i < len(new_list):
+    while i < len(custom_row_list):
         with open('jsonfiles/data'+str(i)+'.json', 'w') as f:
-            json.dump(new_list[i:i+100], f)
+            json.dump(custom_row_list[i:i+100], f)
         i += 100
 
 
