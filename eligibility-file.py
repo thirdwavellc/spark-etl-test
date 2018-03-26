@@ -64,7 +64,7 @@ def main():
 
 
         #Validate the normalized data
-        validate_object = Validator(cr)
+        validate_object = Validator(cr,[valid_name,valid_dob])
 
 
 
