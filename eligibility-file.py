@@ -16,7 +16,13 @@ import sys
 import normalize
 import ipdb;
 
+
+
 def main():
+<<<<<<< HEAD
+=======
+    '''Program entry point'''
+>>>>>>> parent of be2472b... update to normalized row obejct (normalize.py) and additional validation functions in validations.py.
 
     spark = SparkSession\
         .builder\
@@ -31,6 +37,7 @@ def main():
         .option("treatEmptyValuesAsNulls", "true") \
         .load(data_file())
 
+<<<<<<< HEAD
     data_frame_object = df.collect()
 
     #Possible array for the normalization functions
@@ -62,6 +69,15 @@ def main():
         custom_row_list.append(cr.dictionary)
 
 
+=======
+
+    column_names = df.schema.names
+    val_list = df.collect()
+    new_list = []
+    for i in range(0,len(val_list)-1):
+
+        new_list.append(normalize.normalize_list(val_list[i],column_names))
+>>>>>>> parent of be2472b... update to normalized row obejct (normalize.py) and additional validation functions in validations.py.
 
         #Validate the normalized data
         validate_object = Validator(cr,[valid_name,valid_dob])
@@ -72,9 +88,9 @@ def main():
     #TO-DO Code something that creates a folder instead of relying on already having that folder there
 
     i = 0
-    while i < len(custom_row_list):
+    while i < len(new_list):
         with open('jsonfiles/data'+str(i)+'.json', 'w') as f:
-            json.dump(custom_row_list[i:i+100], f)
+            json.dump(new_list[i:i+100], f)
         i += 100
 
 

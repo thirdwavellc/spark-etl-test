@@ -28,7 +28,7 @@ class Validator:
     def validate(self):
         self._clear_errors()
         validation_results = list(map(lambda validation: validation(self.entry), self.validations))
-        self.errors = ["first_name","last_name", "birth_date","email"]
+        #self.errors = ["first_name","last_name", "birth_date","email"]
         failed_validations = [j for i, j in zip(validation_results, self.errors) if i == False]
         if (len(failed_validations) == 0):
             return True

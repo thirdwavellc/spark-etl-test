@@ -8,6 +8,7 @@ import zipcodes
 import ast
 
 
+<<<<<<< HEAD
 class customRow:
 
 	def __init__(self, row_object,eligibility_schema):
@@ -67,6 +68,33 @@ def normalize_first_name(string):
 	spaces_removed_first_name = remove_spaces(string)
 	normalized_first_name = title_case(spaces_removed_first_name)
 	return(normalized_first_name)
+=======
+
+def normalize_list(list_object,schema_names):
+	 var_to_normalize=["first_name","last_name","email","zip_code"]
+	 new_list=[None]*len(list_object)
+	 index_first_name = schema_names.index("first_name")
+	 index_last_name = schema_names.index("last_name")
+	 index_email = schema_names.index("email")
+	 index_zip = schema_names.index("zip_code")
+	 new_list[index_first_name]=normalize_first_name(list_object[index_first_name])
+	 new_list[index_last_name]=normalize_last_name(list_object[index_last_name])
+	 new_list[index_email]=normalize_email(list_object[index_email])
+	 new_list[index_zip]=normalize_zip(list_object[index_zip])
+	 for name in schema_names:
+		 if (name not in var_to_normalize):
+			 print(name)
+			 new_list[schema_names.index(name)]= list_object[schema_names.index(name)]
+	 return(new_list)
+
+
+
+
+def normalize_first_name(string):
+	string = remove_spaces(string)
+	string = title_case(string)
+	return string
+>>>>>>> parent of be2472b... update to normalized row obejct (normalize.py) and additional validation functions in validations.py.
 
 #removes spaces, makes title case and removes and suffixes
 def normalize_last_name(string):
@@ -80,35 +108,6 @@ def normalize_last_name(string):
 def normalize_email(string):
 	return(remove_spaces(string))
 
-
-#utilizes the zipcodes python lib that returns a dictionary. One of the items is a 5 digit zip. Even if user inputs longer zip version it will return 5 digit zip
-def normalize_zip(zip_code):
-	try:
-		zip_code_normal = zipcodes.matching(zip_code)[0]['zip_code']
-		return(str(zip_code_normal))
-	except:
-		return(None)
-
-
-def phone_strip_nondigits(phone):
-	return(re.sub('[^0-9]','', phone))
-
-
-def uppercase_state(state):
-	try:
-		return(state.upper())
-	except:
-		return(None)
-
-
-def remove_spaces(string):
-	 string = string.replace(" ", "")
- 	 return str(string)
-
-def title_case(string):
-	 string = string.lower().title()
- 	 return string
-
 def remove_suffix(string):
 	  suffixes = ["Esq", "Ii", "Iii", "Iiii", "Iv", "Jnr", "Jr", "Sr"]
 	  string = string.replace(" ", "")
@@ -119,3 +118,57 @@ def remove_suffix(string):
 			  string = string[:-len(suffix)]
 			  return(string)
 	  return(string)
+
+
+#utilizes the zipcodes python lib that returns a dictionary. One of the items is a 5 digit zip. Even if user inputs longer zip version it will return 5 digit zip
+def normalize_zip(zip_code):
+	print("here")
+	print(zip_code)
+	try:
+		print("success")
+		zip_code_normal = zipcodes.matching(zip_code)[0]['zip_code']
+		return(str(zip_code_normal))
+	except:
+		return(None)
+
+
+def phone_strip_nondigits(phone):
+	return(re.sub('[^0-9]','', phone))
+
+
+<<<<<<< HEAD
+def uppercase_state(state):
+	try:
+		return(state.upper())
+	except:
+		return(None)
+=======
+def uppcase_state(state):
+	return(state.upper())
+>>>>>>> parent of be2472b... update to normalized row obejct (normalize.py) and additional validation functions in validations.py.
+
+
+def remove_spaces(string):
+	 string = string.replace(" ", "")
+ 	 return str(string)
+
+def title_case(string):
+	 string = string.lower().title()
+ 	 return string
+
+<<<<<<< HEAD
+def remove_suffix(string):
+	  suffixes = ["Esq", "Ii", "Iii", "Iiii", "Iv", "Jnr", "Jr", "Sr"]
+	  string = string.replace(" ", "")
+  	  string = string.replace(".", "")
+  	  string = string.replace(",", "")
+	  for suffix in suffixes:
+		  if(string.endswith(suffix)):
+			  string = string[:-len(suffix)]
+			  return(string)
+	  return(string)
+=======
+
+
+#def clean_ssn():
+>>>>>>> parent of be2472b... update to normalized row obejct (normalize.py) and additional validation functions in validations.py.
