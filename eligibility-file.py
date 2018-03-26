@@ -14,13 +14,9 @@ import pandas
 import re
 import sys
 import normalize
-
-
-
+import ipdb;
 
 def main():
-    '''Program entry point'''
-
 
     spark = SparkSession\
         .builder\
@@ -34,8 +30,6 @@ def main():
         .option("delimiter", "|") \
         .option("treatEmptyValuesAsNulls", "true") \
         .load(data_file())
-
-
 
     data_frame_object = df.collect()
 
@@ -58,14 +52,19 @@ def main():
         cr.dictionary['first_name'] = normalize.normalize_first_name(cr.dictionary['first_name'])
         cr.dictionary['last_name'] = normalize.normalize_last_name(cr.dictionary['last_name'])
         cr.dictionary['email'] = normalize.normalize_email(cr.dictionary['email'])
-        print("ere")
-        print(cr.dictionary['state'])
         cr.dictionary['state'] = normalize.uppercase_state(cr.dictionary['state'])
+        cr.dictionary['date_of_birth'] = normalize.normalize_date(cr.dictionary['date_of_birth'])
+
 
         #This will put the object into an array version
-        #array_version=x.to_array(eligibility_schema())
+        #array_version=cr.to_array(eligibility_schema())
 
         custom_row_list.append(cr.dictionary)
+
+
+
+        #Validate the normalized data
+        validate_object = Validator(cr)
 
 
 
@@ -123,8 +122,6 @@ def saved_text_file():
     '''Filename for saved text file'''
     datestamp = date.today().strftime("%Y%m%d")
     return "eligibility-sample-" + datestamp
-
-
 
 
 

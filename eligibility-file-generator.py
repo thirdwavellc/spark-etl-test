@@ -163,7 +163,7 @@ class Member:
             str(self.subscriber.group.client.source_id),
             str(self.subscriber.group.client.client_name),
             str('MEM'),
-            str(now.strftime('%Y-%m-%d')),
+            str(now.strftime('%Y%m%d')),
             str(self.subscriber.employee.ssn),
             str(self.ssn),
             str(self.rel_to_subscriber),

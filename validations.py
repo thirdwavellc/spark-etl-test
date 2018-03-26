@@ -1,6 +1,4 @@
 import os, sys
-
-# import ../db.py
 import time
 from validate_email import validate_email
 
