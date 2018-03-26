@@ -15,7 +15,7 @@ class Validator:
     def __init__(self, entry, validations=[]):
         self.entry = entry
         self.validations = validations
-        self.errors = ["first_name","birth_date"]
+        self.errors = ["first_name","last_name", "birth_date","email"]
 
 #    def validate(self):
 #        self._clear_errors()
@@ -27,10 +27,10 @@ class Validator:
 
     def validate(self):
         self._clear_errors()
-        self.errors = ["first_name","birth_date"]
         validation_results = list(map(lambda validation: validation(self.entry), self.validations))
+        self.errors = ["first_name","last_name", "birth_date","email"]
         failed_validations = [j for i, j in zip(validation_results, self.errors) if i == False]
-        if len(failed_validations) == 0):
+        if (len(failed_validations) == 0):
             return True
         else:
             return failed_validations
@@ -38,6 +38,8 @@ class Validator:
 
     def _clear_errors(self):
         self.errors = []
+
+
 
 
 def valid_dob(entry):
@@ -66,7 +68,7 @@ def valid_ssn(entry):
         return(True)
 
 
-def valid_name(entry):
+def valid_first_name(entry):
     try:
         if(no_spaces(entry["first_name"]) and title_case(entry["first_name"]) and entry["first_name"].isalpha()):
             return(True)
@@ -76,17 +78,18 @@ def valid_name(entry):
         return(False)
 
 
-def valid_email(entry):
-        return((validate_email(entry.email)))
-
-
-
-def valid_zip(zipcode):
+def valid_last_name(entry):
     try:
-        zip_code_normal = zipcodes.matching(entry.zip_code)
-        return(True)
+        if(no_spaces(entry["last_name"]) and title_case(entry["last_name"]) and entry["last_name"].isalpha()):
+            return(True)
+        else:
+            return(False)
     except:
-        return(None)
+        return(False)
+
+
+def valid_email(entry):
+        return((validate_email(entry["email"])))
 
 
 #General functions
@@ -104,12 +107,10 @@ def title_case(string):
         return(False)
 
 
-
-
 def test():
-    entry={"first_name":"max","date_of_birth":"2017010"}
+    entry={"first_name":"max","last_name":"Hansen","date_of_birth":"2017010","email":"mhansen1989@gmail.com"}
 
-    validations = [valid_name,valid_dob]
+    validations = [valid_first_name,valid_last_name,valid_dob,valid_email]
 
     x = Validator(entry,validations)
     return x.validate()
