@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Mon Mar 26 13:57:35 CDT 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0162-63ac-3d95-000010c1aa38 
+on database directory /home/max/Work/thirdwave/zest/spark-etl-test/eligibility_file/eligibility_file/metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@3f6b71b2 
+Loaded from file:/home/max/.local/lib/python2.7/site-packages/pyspark/jars/derby-10.12.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_151-8u151-b12-0ubuntu0.16.04.2-b12
+user.dir=/home/max/Work/thirdwave/zest/spark-etl-test/eligibility_file/eligibility_file
+os.name=Linux
+os.arch=amd64
+os.version=4.13.0-37-generic
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
