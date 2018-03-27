@@ -5,42 +5,53 @@ import datetime
 
 
 
-#class Result:
-#    def __init__(self, passed, error=""):
-#        self.passed = passed
-#        self.failed = not passed
-#        self.error = error
-
 class Validator:
     def __init__(self, entry, validations=[]):
         self.entry = entry
         self.validations = validations
-        self.errors = ["first_name","last_name", "birth_date","email"]
-
-#    def validate(self):
-#        self._clear_errors()
-#        self.validations = [valid_dob,valid_name]
-#        validation_results = list(map(lambda validation: validation(self.entry), self.validations))
-#        failed_validations = list(filter(lambda validation: validation.failed), validation_results)
-#        self.errors = list(map(lambda validation: validation.error))
-#        return len(self.errors) == 0
+        self.errors = [
+        "source_id",
+        "client_name",
+        "field",
+        "run_date",
+        "employee_ssn",
+        "member_ssn",
+        "rel_to_subscriber",
+        "last_name",
+        "first_name",
+        "date_of_birth",
+        "gender",
+        "benefit_type",
+        "coverage_level",
+        "group_number",
+        "ins_subscriber_id",
+        "member_id",
+        "plan_id",
+        "plan_name",
+        "coverage_start_date",
+        "coverage_end_date",
+        "coverage_status",
+        "email",
+        "address_line_1",
+        "address_line_2",
+        "city",
+        "state",
+        "zip_code"
+        ]
 
     def validate(self):
-        self._clear_errors()
         validation_results = list(map(lambda validation: validation(self.entry), self.validations))
-        self.errors = ["first_name","last_name", "birth_date","email"]
         failed_validations = [j for i, j in zip(validation_results, self.errors) if i == False]
+
         if (len(failed_validations) == 0):
             return True
         else:
             return failed_validations
 
 
-    def _clear_errors(self):
-        self.errors = []
 
-
-
+def no_validation(entry):
+    return entry
 
 def valid_dob(entry):
     try:
@@ -89,23 +100,29 @@ def valid_last_name(entry):
 
 
 def valid_email(entry):
-        return((validate_email(entry["email"])))
+        return((validate_email(entry["email"])) and no_spaces(entry["email"]))
 
 
 #General functions
-def no_spaces(string):
-    if (' ' in string) == True:
+def no_spaces(field):
+    if (' ' in field) == True:
         return(False)
     else:
         return(True)
 
 
-def title_case(string):
-    if (string.istitle()):
+def title_case(field):
+    if (field.istitle()):
         return(True)
     else:
         return(False)
 
+
+def is_greater_than(field,notgreaterthanthis):
+    if len(field) > notgreaterthanthis:
+        return(False)
+    else:
+        return(True)
 
 def test():
     entry={"first_name":"max","last_name":"Hansen","date_of_birth":"2017010","email":"mhansen1989@gmail.com"}
