@@ -17,26 +17,97 @@ import normalize
 import ipdb;
 import eligibility_file.eligibility_file.validations as validation
 
+# TODO: move into library
+def create_spark_session(app_name):
+    return SparkSession\
+       .builder\
+       .appName(app_name)\
+       .getOrCreate()
 
-def main():
-
-    spark = SparkSession\
-        .builder\
-        .appName("PySparkEligibiltyFile")\
-        .getOrCreate()
-
-    df = spark.read \
+# TODO: move into library
+def get_data_frame_list(schema, data_file):
+    return spark.read \
         .format("CSV") \
-        .schema(eligibility_schema()) \
+        .schema(schema) \
         .option("header", "false") \
         .option("delimiter", "|") \
         .option("treatEmptyValuesAsNulls", "true") \
-        .load(data_file())
+        .load(data_file) \
+        .collect()
 
-    data_frame_object = df.collect()
+# TODO: move into client-specific file
+class RadiceEtlProcessor:
+    def __init__(self):
+        self.spark = create_spark_session("PySparkEligibiltyFile")
+        self.data_frame_list = get_data_frame_list(eligibility_schema(), data_file())
+        self.entries = create_entries()
+        self.normalizations = []
+        self.validations = []
 
-    #Possible array for the normalization functions
-    normalize_functions=[]
+    def process(self):
+        self.normalize()
+        self.validate()
+        self.export()
+
+    def create_entries(self):
+        return list(map(lambda data_frame: Entry(data_frame, self.eligibility_schema()), self.data_frame_list))
+
+    def normalize(self):
+        list(map(lambda entry: Normalizer(entry, self.normalizations), self.entries))
+
+    def validate(self):
+        self.validators = list(map(lambda entry: Validator(entry, self.validations).validate(), self.entries))
+        self.valid_validators = filter(lambda validator: not validator.has_errors(), self.validators)
+        self.invalid_validators = filter(lambda validator: validator.has_errors(), self.validators)
+
+    def export(self):
+        # export to Yaro app file
+        # export to Alegeus EDI
+        # do something with bad entries
+        return True
+
+    def eligibility_schema():
+        '''Defines schema in Eligibility file for CSV ingestion (assuming no header present)'''
+        return StructType([
+            StructField('source_id', StringType()),         #No validation
+            StructField('client_name', StringType()),       #No validation
+            StructField('field', StringType()),             #No validation
+            StructField('run_date', StringType()),          #Yes validation
+            StructField('employee_ssn', StringType()),          #Yes validation
+            StructField('member_ssn', StringType()),        #Yes validation
+            StructField('rel_to_subscriber', StringType()), #No validation
+            StructField('last_name', StringType()),         #Yes validation
+            StructField('first_name', StringType()),        #Yes validation
+            StructField('date_of_birth', StringType()),     #Yes validation
+            StructField('gender', StringType()),            #No validation
+            StructField('benefit_type', StringType()),      #No validation
+            StructField('coverage_level', StringType()),    #Yes validation
+            StructField('group_number', StringType()),      #No validation
+            StructField('ins_subscriber_id', StringType()), #No validation
+            StructField('member_id', StringType()),         #No validation
+            StructField('plan_id', StringType()),           #No validation
+            StructField('plan_name', StringType()),         #No validation
+            StructField('coverage_start_date', StringType()), #Yes validation
+            StructField('coverage_end_date', StringType()),   #Yes validation
+            StructField('coverage_status', StringType()),     #No validation
+            StructField('email', StringType()),             #Yes validation
+            StructField('address_line_1', StringType()),    #No validation
+            StructField('address_line_2', StringType()),    #No validation
+            StructField('city', StringType()),              #No validation
+            StructField('state', StringType()),             #No validation
+            StructField('zip_code', StringType())           #Yes validation
+        ])
+
+    def data_file():
+        '''Path that contains sample Eligibility file'''
+        file_dir = os.path.dirname(__file__)
+        return os.path.join(file_dir,  "eligibility-sample.txt")
+
+def main():
+    etl_process = RadiceEtlProcessor()
+    etl_process.process()
+
+    #=============================================================================
 
     #Create a new list to insert our custom row objects into
     custom_row_list = []
@@ -100,38 +171,6 @@ def main():
 
 
 
-def eligibility_schema():
-    '''Defines schema in Eligibility file for CSV ingestion (assuming no header present)'''
-    return StructType([
-        StructField('source_id', StringType()),         #No validation
-        StructField('client_name', StringType()),       #No validation
-        StructField('field', StringType()),             #No validation
-        StructField('run_date', StringType()),          #Yes validation
-        StructField('employee_ssn', StringType()),          #Yes validation
-        StructField('member_ssn', StringType()),        #Yes validation
-        StructField('rel_to_subscriber', StringType()), #No validation
-        StructField('last_name', StringType()),         #Yes validation
-        StructField('first_name', StringType()),        #Yes validation
-        StructField('date_of_birth', StringType()),     #Yes validation
-        StructField('gender', StringType()),            #No validation
-        StructField('benefit_type', StringType()),      #No validation
-        StructField('coverage_level', StringType()),    #Yes validation
-        StructField('group_number', StringType()),      #No validation
-        StructField('ins_subscriber_id', StringType()), #No validation
-        StructField('member_id', StringType()),         #No validation
-        StructField('plan_id', StringType()),           #No validation
-        StructField('plan_name', StringType()),         #No validation
-        StructField('coverage_start_date', StringType()), #Yes validation
-        StructField('coverage_end_date', StringType()),   #Yes validation
-        StructField('coverage_status', StringType()),     #No validation
-        StructField('email', StringType()),             #Yes validation
-        StructField('address_line_1', StringType()),    #No validation
-        StructField('address_line_2', StringType()),    #No validation
-        StructField('city', StringType()),              #No validation
-        StructField('state', StringType()),             #No validation
-        StructField('zip_code', StringType())           #Yes validation
-    ])
-
 def eligibility_schema_validations():
     validations = [
     validation.no_validation,
@@ -162,12 +201,6 @@ def eligibility_schema_validations():
     validation.no_validation,
     validation.no_validation]
     return(validations)
-
-
-def data_file():
-    '''Path that contains sample Eligibility file'''
-    file_dir = os.path.dirname(__file__)
-    return os.path.join(file_dir,  "eligibility-sample.txt")
 
 def saved_text_file():
     '''Filename for saved text file'''

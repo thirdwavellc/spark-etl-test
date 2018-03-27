@@ -3,52 +3,32 @@ import time
 from validate_email import validate_email
 import datetime
 
+class ValidationResult:
+    def __init__(self, entry, status, error=''):
+        self.entry = entry
+        self.status = status
+        self.error = error
 
+    def passed(self):
+        self.status == 'passed'
+
+    def failed(self):
+        self.status == 'failed'
 
 class Validator:
     def __init__(self, entry, validations=[]):
         self.entry = entry
         self.validations = validations
-        self.errors = [
-        "source_id",
-        "client_name",
-        "field",
-        "run_date",
-        "employee_ssn",
-        "member_ssn",
-        "rel_to_subscriber",
-        "last_name",
-        "first_name",
-        "date_of_birth",
-        "gender",
-        "benefit_type",
-        "coverage_level",
-        "group_number",
-        "ins_subscriber_id",
-        "member_id",
-        "plan_id",
-        "plan_name",
-        "coverage_start_date",
-        "coverage_end_date",
-        "coverage_status",
-        "email",
-        "address_line_1",
-        "address_line_2",
-        "city",
-        "state",
-        "zip_code"
-        ]
+        self.errors = []
+
+    def has_errors(self):
+        return len(self.errors) > 0
 
     def validate(self):
         validation_results = list(map(lambda validation: validation(self.entry), self.validations))
-        failed_validations = [j for i, j in zip(validation_results, self.errors) if i == False]
-
-        if (len(failed_validations) == 0):
-            return True
-        else:
-            return failed_validations
-
-
+        failed_validations = list(filter(lambda validation: validation.failed()), validation_results)
+        self.errors = failed_validations
+        return self
 
 def no_validation(entry):
     return entry
@@ -74,9 +54,9 @@ def valid_ssn(entry):
             "888888888","999999999","123456789","987654321"]
 
     if (entry.ssn in invalid_ssns or entry.ssn!=9 or entry.ssn.isdigit()!=True):
-        return(False)
+        return ValidationResult(entry, 'failed', 'Invalid SSN')
     else:
-        return(True)
+        return ValidationResult(entry, 'passed')
 
 
 def valid_first_name(entry):
