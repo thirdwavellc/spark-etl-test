@@ -15,10 +15,14 @@ import re
 import sys
 import normalize
 import ipdb;
-import eligibility_file.eligibility_file.validations as validation
+
 
 
 def main():
+<<<<<<< HEAD
+=======
+    '''Program entry point'''
+>>>>>>> parent of be2472b... update to normalized row obejct (normalize.py) and additional validation functions in validations.py.
 
     spark = SparkSession\
         .builder\
@@ -33,6 +37,7 @@ def main():
         .option("treatEmptyValuesAsNulls", "true") \
         .load(data_file())
 
+<<<<<<< HEAD
     data_frame_object = df.collect()
 
     #Possible array for the normalization functions
@@ -61,42 +66,33 @@ def main():
         #This will put the object into an array version
         #array_version=cr.to_array(eligibility_schema())
 
-        custom_row_list.append(cr)
+        custom_row_list.append(cr.dictionary)
 
 
-
+=======
 
     column_names = df.schema.names
-    passed_entries=[]
-    failed_entries=[]
+    val_list = df.collect()
+    new_list = []
+    for i in range(0,len(val_list)-1):
 
-    for entry in custom_row_list:
-
-
+        new_list.append(normalize.normalize_list(val_list[i],column_names))
+>>>>>>> parent of be2472b... update to normalized row obejct (normalize.py) and additional validation functions in validations.py.
 
         #Validate the normalized data
-        validations  = eligibility_schema_validations()
-        validated_entry = validation.Validator(entry.dictionary,validations).validate()
+        validate_object = Validator(cr,[valid_name,valid_dob])
 
-        if(validated_entry==True):
-            passed_entries.append(entry.dictionary)
 
-        else:
-            failed_entries.append(entry.dictionary)
+
 
     #TO-DO Code something that creates a folder instead of relying on already having that folder there
+
     i = 0
-    while i < len(passed_entries):
+    while i < len(new_list):
         with open('jsonfiles/data'+str(i)+'.json', 'w') as f:
-            json.dump(passed_entries[i:i+100], f)
+            json.dump(new_list[i:i+100], f)
         i += 100
 
-
-    i = 0
-    while i < len(failed_entries):
-        with open('failedentries/data'+str(i)+'.json', 'w') as f:
-            json.dump(failed_entries[i:i+100], f)
-        i += 100
 
 
 
@@ -107,7 +103,7 @@ def eligibility_schema():
         StructField('client_name', StringType()),       #No validation
         StructField('field', StringType()),             #No validation
         StructField('run_date', StringType()),          #Yes validation
-        StructField('employee_ssn', StringType()),          #Yes validation
+        StructField('employee_ssn', StringType()),      #Yes validation
         StructField('member_ssn', StringType()),        #Yes validation
         StructField('rel_to_subscriber', StringType()), #No validation
         StructField('last_name', StringType()),         #Yes validation
@@ -131,37 +127,6 @@ def eligibility_schema():
         StructField('state', StringType()),             #No validation
         StructField('zip_code', StringType())           #Yes validation
     ])
-
-def eligibility_schema_validations():
-    validations = [
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.valid_last_name,
-    validation.valid_first_name,
-    validation.valid_dob,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.valid_email,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation]
-    return(validations)
 
 
 def data_file():

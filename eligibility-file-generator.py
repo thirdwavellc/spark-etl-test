@@ -132,23 +132,23 @@ class Member:
         self.subscriber = subscriber
         self.rel_to_subscriber = rel_to_subscriber
         if self.rel_to_subscriber==0:
-            self.original_last_name = fake.last_name()
-            self.last_name = add_random_space(5,self.original_last_name)
+            self.last_name = fake.last_name()
+            self.last_name = add_random_space(100,self.last_name)
         else:
-            self.original_last_name = self.subscriber.employee.last_name
-            self.last_name = add_random_space(1,self.original_last_name)
+            self.last_name = self.subscriber.employee.last_name
+            self.last_name = add_random_space(100,self.last_name)
 
         self.first_name = fake.first_name()
         self.first_name = add_random_space(100,self.first_name)
         self.date_of_birth = fake.date_between(start_date='-58y', end_date='-18y')
-        if self.rel_to_subscriber==2:
+        self.rel_to_subscriber==2:
             self.date_of_birth = fake.date_between(start_date='-38y', end_date='-18y')
         self.gender = 'M' if percent_chance(50) else 'F'
         self.ssn = fake.ssn() if self.subscriber.group.client.uses_ssn else ''
         self.member_id = '' if self.subscriber.group.client.uses_ssn else self.subscriber.ins_subscriber_id + ' ' + subscriber_num
 
         mail_extension = np.random.choice(["@gmail.com","@yahoo.com","@hotmail.com","@aol.com"])
-        self.email = add_random_space(2, self.first_name+ self.original_last_name + mail_extension)
+        self.email = self.first_name + self.last_name + mail_extension
         self.address_line_1 = fake.street_address() if self.is_employee() else ''
         self.address_line_2 = fake.secondary_address() if self.is_employee() and percent_chance(30) else ''
         self.city = fake.city() if self.is_employee() else ''
