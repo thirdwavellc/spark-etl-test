@@ -109,52 +109,6 @@ def main():
 
     #=============================================================================
 
-    #Create a new list to insert our custom row objects into
-    custom_row_list = []
-
-    #Loop thought the data frame object and go through each row
-    for i in range(0,len(data_frame_object)):
-
-        spark_row_object = data_frame_object[i]
-
-        #Create a new Custom Row Object using
-        cr=normalize.customRow(spark_row_object,eligibility_schema())
-
-
-        #Normalizing data
-        cr.dictionary['first_name'] = normalize.normalize_first_name(cr.dictionary['first_name'])
-        cr.dictionary['last_name'] = normalize.normalize_last_name(cr.dictionary['last_name'])
-        cr.dictionary['email'] = normalize.normalize_email(cr.dictionary['email'])
-        cr.dictionary['state'] = normalize.uppercase_state(cr.dictionary['state'])
-        cr.dictionary['date_of_birth'] = normalize.normalize_date(cr.dictionary['date_of_birth'])
-
-
-        #This will put the object into an array version
-        #array_version=cr.to_array(eligibility_schema())
-
-        custom_row_list.append(cr)
-
-
-
-
-    column_names = df.schema.names
-    passed_entries=[]
-    failed_entries=[]
-
-    for entry in custom_row_list:
-
-
-
-        #Validate the normalized data
-        validations  = eligibility_schema_validations()
-        validated_entry = validation.Validator(entry.dictionary,validations).validate()
-
-        if(validated_entry==True):
-            passed_entries.append(entry.dictionary)
-
-        else:
-            failed_entries.append(entry.dictionary)
-
     #TO-DO Code something that creates a folder instead of relying on already having that folder there
     i = 0
     while i < len(passed_entries):
