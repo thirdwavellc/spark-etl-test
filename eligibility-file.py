@@ -15,17 +15,26 @@ import re
 import sys
 import normalize
 import ipdb;
-import eligibility_file.eligibility_file.validations as validation
+import eligibility_file.eligibility_file.validations as v
+import eligibility_file.eligibility_file.models as m
+import eligibility_file.eligibility_file.normalizations as n
+import eligibility_file.eligibility_file
 
 # TODO: move into library
-def create_spark_session(app_name):
-    return SparkSession\
-       .builder\
-       .appName(app_name)\
-       .getOrCreate()
+#def create_spark_session(app_name):
+#    spark = SparkSession\
+#       .builder\
+#       .appName(app_name)\
+#       .getOrCreate()
+#    return spark
 
 # TODO: move into library
-def get_data_frame_list(schema, data_file):
+def get_data_frame_list(schema, data_file,app_name):
+    spark = SparkSession\
+           .builder\
+           .appName(app_name)\
+           .getOrCreate()
+
     return spark.read \
         .format("CSV") \
         .schema(schema) \
@@ -38,11 +47,25 @@ def get_data_frame_list(schema, data_file):
 # TODO: move into client-specific file
 class RadiceEtlProcessor:
     def __init__(self):
-        self.spark = create_spark_session("PySparkEligibiltyFile")
-        self.data_frame_list = get_data_frame_list(eligibility_schema(), data_file())
-        self.entries = create_entries()
-        self.normalizations = []
-        self.validations = []
+        #self.spark = create_spark_session("PySparkEligibiltyFile")
+        self.data_frame_list = get_data_frame_list(self.eligibility_schema(), self.data_file(),"PySparkEligibiltyFile")
+        self.entries = self.create_entries()
+        self.normalizations = [
+        n.normalize_date_of_birth,
+        n.normalize_coverage_start_date,
+        n.normalize_coverage_end_date,
+        n.normalize_first_name,
+        n.normalize_last_name,
+        n.normalize_email,
+        n.normalize_zip,
+        n.normalize_state]
+        self.validations = [
+        v.valid_dob,
+        v.valid_ssn,
+        v.valid_first_name,
+        v.valid_last_name,
+        v.valid_email
+        ]
 
     def process(self):
         self.normalize()
@@ -50,23 +73,66 @@ class RadiceEtlProcessor:
         self.export()
 
     def create_entries(self):
-        return list(map(lambda data_frame: Entry(data_frame, self.eligibility_schema()), self.data_frame_list))
+        return list(map(lambda data_frame: m.Entry(data_frame, self.eligibility_schema()), self.data_frame_list))
 
     def normalize(self):
-        list(map(lambda entry: Normalizer(entry, self.normalizations), self.entries))
+        list(map(lambda entry: n.Normalizer(entry, self.normalizations).normalize(), self.entries))
+
 
     def validate(self):
-        self.validators = list(map(lambda entry: Validator(entry, self.validations).validate(), self.entries))
+        self.validators = list(map(lambda entry: v.Validator(entry, self.validations).validate(), self.entries))
         self.valid_validators = filter(lambda validator: not validator.has_errors(), self.validators)
         self.invalid_validators = filter(lambda validator: validator.has_errors(), self.validators)
 
-    def export(self):
-        # export to Yaro app file
-        # export to Alegeus EDI
-        # do something with bad entries
-        return True
 
-    def eligibility_schema():
+
+    def myfunc(self,x):
+        array = []
+        for attr, value in x.entry.__dict__.iteritems():
+            return array.append(value)
+
+    def export(self):
+        print(len(self.validators))
+        print(len(self.valid_validators))
+        print(len(self.invalid_validators))
+
+
+        #valid_entries_array = list(map(lambda validator: validator.entry.members, self.valid_validators))
+        #invalid_entries_array = list(map(lambda validator: validator.entry.members, self.invalid_validators))
+
+
+        valid_entries_array=[]
+        for valid_validator in self.valid_validators:
+            valid_entry_array =[]
+            for attr, value in valid_validator.entry.__dict__.iteritems():
+                valid_entry_array.append(value)
+            valid_entries_array.append(valid_entry_array)
+
+        invalid_entries_array=[]
+        for invalid_validator in self.invalid_validators:
+            invalid_entry_array =[]
+            for attr, value in invalid_validator.entry.__dict__.iteritems():
+                invalid_entry_array.append(value)
+            invalid_entries_array.append(valid_entry_array)
+
+
+        #sys.exit("stop here")
+        i = 0
+        while i < len(valid_entries_array):
+            with open('jsonfiles/data'+str(i)+'.json', 'w') as f:
+                json.dump(valid_entries_array[i:i+100], f)
+            i += 100
+
+        i = 0
+        while i < len(invalid_entries_array):
+            with open('failedentries/data'+str(i)+'.json', 'w') as f:
+                json.dump(invalid_entries_array[i:i+100], f)
+            i += 100
+
+
+
+
+    def eligibility_schema(self):
         '''Defines schema in Eligibility file for CSV ingestion (assuming no header present)'''
         return StructType([
             StructField('source_id', StringType()),         #No validation
@@ -98,7 +164,7 @@ class RadiceEtlProcessor:
             StructField('zip_code', StringType())           #Yes validation
         ])
 
-    def data_file():
+    def data_file(self):
         '''Path that contains sample Eligibility file'''
         file_dir = os.path.dirname(__file__)
         return os.path.join(file_dir,  "eligibility-sample.txt")
@@ -109,52 +175,10 @@ def main():
 
     #=============================================================================
 
-    #TO-DO Code something that creates a folder instead of relying on already having that folder there
-    i = 0
-    while i < len(passed_entries):
-        with open('jsonfiles/data'+str(i)+'.json', 'w') as f:
-            json.dump(passed_entries[i:i+100], f)
-        i += 100
-
-
-    i = 0
-    while i < len(failed_entries):
-        with open('failedentries/data'+str(i)+'.json', 'w') as f:
-            json.dump(failed_entries[i:i+100], f)
-        i += 100
 
 
 
-def eligibility_schema_validations():
-    validations = [
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.valid_last_name,
-    validation.valid_first_name,
-    validation.valid_dob,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.valid_email,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation,
-    validation.no_validation]
-    return(validations)
+
 
 def saved_text_file():
     '''Filename for saved text file'''
