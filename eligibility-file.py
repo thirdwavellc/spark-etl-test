@@ -59,6 +59,7 @@ class RadiceEtlProcessor:
         n.normalize_email,
         n.normalize_zip,
         n.normalize_state]
+
         self.validations = [
         v.valid_dob,
         v.valid_ssn,
@@ -86,40 +87,21 @@ class RadiceEtlProcessor:
 
 
 
-    def myfunc(self,x):
-        array = []
-        for attr, value in x.entry.__dict__.iteritems():
-            return array.append(value)
+    def return_fields(self,validator):
+        valid_entry_array =[]
+        for attr, value in validator.entry.__dict__.iteritems():
+            valid_entry_array.append(value)
+        return valid_entry_array
 
     def export(self):
-        print(len(self.validators))
-        print(len(self.valid_validators))
-        print(len(self.invalid_validators))
+
+        valid_entries_array= list(map(lambda validator:self.return_fields(validator),self.valid_validators))
+        invalid_entries_array= list(map(lambda validator:self.return_fields(validator),self.valid_validators))
 
 
-        #valid_entries_array = list(map(lambda validator: validator.entry.members, self.valid_validators))
-        #invalid_entries_array = list(map(lambda validator: validator.entry.members, self.invalid_validators))
-
-
-        valid_entries_array=[]
-        for valid_validator in self.valid_validators:
-            valid_entry_array =[]
-            for attr, value in valid_validator.entry.__dict__.iteritems():
-                valid_entry_array.append(value)
-            valid_entries_array.append(valid_entry_array)
-
-        invalid_entries_array=[]
-        for invalid_validator in self.invalid_validators:
-            invalid_entry_array =[]
-            for attr, value in invalid_validator.entry.__dict__.iteritems():
-                invalid_entry_array.append(value)
-            invalid_entries_array.append(valid_entry_array)
-
-
-        #sys.exit("stop here")
         i = 0
         while i < len(valid_entries_array):
-            with open('jsonfiles/data'+str(i)+'.json', 'w') as f:
+            with open('passedentries/data'+str(i)+'.json', 'w') as f:
                 json.dump(valid_entries_array[i:i+100], f)
             i += 100
 
@@ -169,13 +151,11 @@ class RadiceEtlProcessor:
         file_dir = os.path.dirname(__file__)
         return os.path.join(file_dir,  "eligibility-sample.txt")
 
+
+
 def main():
     etl_process = RadiceEtlProcessor()
     etl_process.process()
-
-    #=============================================================================
-
-
 
 
 
