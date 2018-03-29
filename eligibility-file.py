@@ -7,26 +7,31 @@ from pyspark.sql.types import *
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField
 from pyspark.sql.types import DoubleType, IntegerType, StringType
+import boto3
 import csv
 import json
 import sys, getopt
-import pandas
 import re
 import sys
-import normalize
-import ipdb;
+import ipdb
+import paramiko
 import eligibility_file.eligibility_file.validations as v
 import eligibility_file.eligibility_file.models as m
 import eligibility_file.eligibility_file.normalizations as n
 import eligibility_file.eligibility_file
 
-# TODO: move into library
-#def create_spark_session(app_name):
-#    spark = SparkSession\
-#       .builder\
-#       .appName(app_name)\
-#       .getOrCreate()
-#    return spark
+
+
+def get_sftp_file(key_path,username):
+    k = paramiko.RSAKey.from_private_key_file(key_path)
+    con = paramiko.SSHClient()
+    con.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    con.connect( hostname = "ec2-34-206-40-147.compute-1.amazonaws.com", username = username, pkey = k )
+    sftp_con = con.open_sftp()
+    sftp_con.get('/uploads/radice/eligibility-sample.txt','tempdownloads/eligibility-sample-copy.txt')
+    sftp_con.close()
+
+
 
 # TODO: move into library
 def get_data_frame_list(schema, data_file,app_name):
@@ -34,7 +39,6 @@ def get_data_frame_list(schema, data_file,app_name):
            .builder\
            .appName(app_name)\
            .getOrCreate()
-
     return spark.read \
         .format("CSV") \
         .schema(schema) \
@@ -48,7 +52,8 @@ def get_data_frame_list(schema, data_file,app_name):
 class RadiceEtlProcessor:
     def __init__(self):
         #self.spark = create_spark_session("PySparkEligibiltyFile")
-        self.data_frame_list = get_data_frame_list(self.eligibility_schema(), self.data_file(),"PySparkEligibiltyFile")
+        get_sftp_file('/home/max/Downloads/radice-sftp.pem','radice')
+        self.data_frame_list = get_data_frame_list(self.eligibility_schema(), self.downloaded_data_file(),"PySparkEligibiltyFile")
         self.entries = self.create_entries()
         self.normalizations = [
         n.normalize_date_of_birth,
@@ -151,6 +156,10 @@ class RadiceEtlProcessor:
         file_dir = os.path.dirname(__file__)
         return os.path.join(file_dir,  "eligibility-sample.txt")
 
+    def downloaded_data_file(self):
+        '''Path that contains sample Eligibility file'''
+        file_dir = os.path.dirname(__file__)
+        return os.path.join(file_dir,  "tempdownloads/eligibility-sample-copy.txt")
 
 
 def main():
