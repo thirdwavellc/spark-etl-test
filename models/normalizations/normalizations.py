@@ -3,8 +3,15 @@ import sys
 from datetime import date
 import math
 import operator
+import re
 import zipcodes
+import ast
 import collections
+
+
+
+
+
 
 
 class Normalizer:
@@ -67,10 +74,11 @@ def normalize_state(entry):
 
 
 #Generic Functions
-#TODO Evaluate code sharing with other etlprocessor (add second argument)
+
 def normalize_date(date):
         whitelist = set('0123456789')
         normalized_date = ''.join(filter(whitelist.__contains__, date))
+
         return(str(normalized_date))
 
 def remove_spaces(string):

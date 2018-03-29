@@ -1,0 +1,23 @@
+
+
+class RadiceEtlProcessor:
+
+
+    def __init__(self):
+
+    def process(self):
+          self.normalize()
+          self.validate()
+          self.export()
+
+      def create_entries(self):
+          return list(map(lambda data_frame: entry.Entry(data_frame, self.eligibility_schema()), self.data_frame_list))
+
+      def normalize(self):
+          list(map(lambda entry: norm.Normalizer(entry, self.normalizations).normalize(), self.entries))
+
+
+      def validate(self):
+          self.validators = list(map(lambda entry: valid.Validator(entry, self.validations).validate(), self.entries))
+          self.valid_validators = filter(lambda validator: not validator.has_errors(), self.validators)
+          self.invalid_validators = filter(lambda validator: validator.has_errors(), self.validators)
