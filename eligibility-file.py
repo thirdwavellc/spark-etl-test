@@ -1,21 +1,11 @@
 '''Converts sample Eligibilty file into JSON'''
-import models.radicaletalprocessor as client
-
-
-
-
-
-
-
+import models.radiceetlprocessor as client
 
 
 def main():
     etl_process = client.RadiceEtlProcessor()
     etl_process.process()
     etl_process.export()
-
-
-
 
 
 if __name__ == "__main__":
