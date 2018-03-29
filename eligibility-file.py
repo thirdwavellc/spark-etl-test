@@ -13,8 +13,12 @@ import json
 import sys, getopt
 import re
 import sys
+<<<<<<< HEAD
 import ipdb
 import paramiko
+=======
+import ipdb;
+>>>>>>> 95f3a5ed5283c84900147390e9e8b9224c6928c1
 import eligibility_file.eligibility_file.validations as v
 import eligibility_file.eligibility_file.models as m
 import eligibility_file.eligibility_file.normalizations as n
@@ -94,7 +98,7 @@ class RadiceEtlProcessor:
 
     def return_fields(self,validator):
         valid_entry_array =[]
-        for attr, value in validator.entry.__dict__.iteritems():
+        for attr, value in validator.entry.__dict__.items():
             valid_entry_array.append(value)
         return valid_entry_array
 
