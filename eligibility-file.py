@@ -13,7 +13,6 @@ import sys, getopt
 import pandas
 import re
 import sys
-import normalize
 import ipdb;
 import eligibility_file.eligibility_file.validations as v
 import eligibility_file.eligibility_file.models as m
@@ -89,7 +88,7 @@ class RadiceEtlProcessor:
 
     def return_fields(self,validator):
         valid_entry_array =[]
-        for attr, value in validator.entry.__dict__.iteritems():
+        for attr, value in validator.entry.__dict__.items():
             valid_entry_array.append(value)
         return valid_entry_array
 
