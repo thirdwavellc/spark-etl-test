@@ -8,6 +8,12 @@ import zipcodes
 import ast
 import collections
 
+
+
+
+
+
+
 class Normalizer:
     def __init__(self, entry, normalizations=[]):
         self.entry = entry
@@ -15,7 +21,6 @@ class Normalizer:
 
     def normalize(self):
         list(map(lambda normalization: normalization(self.entry), self.normalizations))
-
 
 
 def normalize_coverage_start_date(entry):

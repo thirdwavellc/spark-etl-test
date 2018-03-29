@@ -1,5 +1,3 @@
-import collections
-
 
 class Entry:
     def __init__(self, row_object, eligibility_schema):
@@ -33,14 +31,11 @@ class Entry:
             self.zip_code =str(row_object["zip_code"])
 
 
-
-
-
-            #create a dictionary to store the fields of the eligibility_schema
-            #this way seems like it will be easier than doing as I did above in creating a variable for each field
-            #self.dictionary=collections.OrderedDict()
-            #for field in eligibility_schema:
-            #        self.dictionary[field.name] = str(row_object[field.name])
+    #def return_fields(self):
+    #    self.entry_dic ={}
+    #    for attr, value in self.__dict__.items():
+    #        self.entry_dic[attr]=value
+    #    return self.entry_dic
 
 
     #Returns an array of the dictionary if needed.
