@@ -3,5 +3,3 @@ datetime
 paramiko
 collections
 zipcodes
-
-./eligibility_file

@@ -1,4 +1,3 @@
-
 from pyspark.sql.types import *
 from pyspark.sql import SparkSession
 import pandas
@@ -13,7 +12,6 @@ def get_file_from_sftp(key_path,username):
     sftp_con = con.open_sftp()
     return (sftp_con.open('/uploads/radice/eligibility-sample.txt'))
 
-
 # TODO: move into library
 def get_data_frame_list(schema,app_name):
     spark = SparkSession\
@@ -22,8 +20,6 @@ def get_data_frame_list(schema,app_name):
            .getOrCreate()
     data = pandas.read_csv(get_file_from_sftp('/home/max/Downloads/radice-sftp.pem','radice'),sep='|',header=0)
     return((spark.createDataFrame(data,schema)).collect())
-
-
 
 def file_partition_size(input_array,entries_per_file,path):
     i = 0
