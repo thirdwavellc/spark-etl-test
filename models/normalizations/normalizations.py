@@ -18,8 +18,6 @@ class Normalizer:
         list(map(lambda normalization: normalization(self.entry), self.normalizations))
 
 
-
-
 def normalize_coverage_start_date(entry):
     entry.coverage_start_date = normalize_date(entry.coverage_start_date)
 

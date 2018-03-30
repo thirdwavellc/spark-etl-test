@@ -1,5 +1,5 @@
 '''Converts sample Eligibilty file into JSON'''
-import models.radiceetlprocessor as client
+import models.processors.radiceetlprocessor as client
 
 
 def main():

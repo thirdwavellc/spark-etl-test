@@ -1,10 +1,10 @@
 
 from pyspark.sql.types import *
-import validations.validations as valid
-import normalizations.normalizations as norm
+from ..validations import validations as valid
+from ..normalizations import normalizations as norm
 import etlprocessor as etlprocessor
-import helpfunctions as helper
-import entries.radiceentry as radiceentry
+from .. import helpfunctions as helper
+from ..entries import radiceentry as radiceentry
 
 
 class RadiceEtlProcessor(etlprocessor.EtlProcessor):
@@ -21,13 +21,14 @@ class RadiceEtlProcessor(etlprocessor.EtlProcessor):
         norm.normalize_zip,
         norm.normalize_state]
 
+
         self.validations = [
         valid.valid_dob,
         valid.valid_ssn,
         valid.valid_first_name,
         valid.valid_last_name,
         valid.valid_email
-        ]
+         ]
 
     def create_entries(self):
         return list(map(lambda data_frame: radiceentry.RadiceEntry(data_frame, self.eligibility_schema()), self.data_frame_list))

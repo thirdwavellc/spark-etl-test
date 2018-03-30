@@ -7,8 +7,10 @@ import sys
 from pyspark.sql.types import *
 from pyspark.sql import SparkSession
 import paramiko
-from ... import validations.validations as valid
-from ... import normalizations.normalizations as norm
+from ..validations import validations as valid
+from ..normalizations import normalizations as norm
+
+
 
 
 class EtlProcessor:
