@@ -1,10 +1,10 @@
-
+import sys
 from pyspark.sql.types import *
-import validations.validations as valid
-import normalizations.normalizations as norm
+from ..validations import validations as valid
+from ..normalizations import normalizations as norm
 import etlprocessor as etlprocessor
-import helpfunctions as helper
-import entries.radiceentry as radiceentry
+from .. import helpfunctions as helper
+from ..entries import radiceentry as radiceentry
 
 
 class RadiceEtlProcessor(etlprocessor.EtlProcessor):
@@ -12,21 +12,22 @@ class RadiceEtlProcessor(etlprocessor.EtlProcessor):
         self.data_frame_list = helper.get_data_frame_list(self.eligibility_schema(),"PySparkEligibiltyFile")
         self.entries = self.create_entries()
         self.normalizations = [
-        norm.normalize_date_of_birth,
-        norm.normalize_coverage_start_date,
-        norm.normalize_coverage_end_date,
-        norm.normalize_first_name,
-        norm.normalize_last_name,
-        norm.normalize_email,
-        norm.normalize_zip,
-        norm.normalize_state]
+        [norm.normalize_date_of_birth,"date_of_birth"],
+        [norm.normalize_coverage_start_date,"coverage_start_date"],
+        [norm.normalize_coverage_end_date,"coverage_end_date"],
+        [norm.normalize_first_name,"first_name"],
+        [norm.normalize_last_name,"last_name"],
+        [norm.normalize_email,"email"],
+        [norm.normalize_zip,"zip_code"],
+        [norm.normalize_state,"state"]
+        ]
 
         self.validations = [
-        valid.valid_dob,
-        valid.valid_ssn,
-        valid.valid_first_name,
-        valid.valid_last_name,
-        valid.valid_email
+        [valid.valid_dob,"date_of_birth"],
+        [valid.valid_ssn,"member_ssn"],
+        [valid.valid_first_name,"first_name"],
+        [valid.valid_last_name,"last_name"],
+        [valid.valid_email,"email"]
         ]
 
     def create_entries(self):
