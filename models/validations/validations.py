@@ -25,19 +25,19 @@ class Validator:
         return (len(self.errors) > 0)
 
     def validate(self):
-        validation_results = list(map(lambda validation: validation(self.entry), self.validations))
+        validation_results = list(map(lambda validation: validation[0](self.entry,validation[1]), self.validations))
         failed_validations = list(filter(lambda validation: validation.failed(), validation_results))
         self.errors = failed_validations
         return self
 
 
 
-def valid_dob(entry):
+def valid_dob(entry,field_name):
     try:
         #check that dob is in the right format
-        valid_date = time.strptime(entry.date_of_birth,'%Y%m%d')
+        valid_date = time.strptime(getattr(entry,field_name),'%Y%m%d')
         now = time.time()
-        dob = (int(entry.date_of_birth[0:4]),int(entry.date_of_birth[4:6]),int(entry.date_of_birth[6:8]),0,0,0,0,0,0)
+        dob = (int(getattr(entry,field_name)[0:4]),int(getattr(entry,field_name)[4:6]),int(getattr(entry,field_name)[6:8]),0,0,0,0,0,0)
         dob_to_seconds = time.mktime(dob)
         #make sure dob isn't in the future
         if dob_to_seconds<now:
@@ -48,11 +48,11 @@ def valid_dob(entry):
         return ValidationResult(entry, 'failed', 'Invalid Date of Birth')
 
 
-def valid_ssn(entry):
+def valid_ssn(entry,field_name):
     invalid_ssns = ["111111111", "222222222","333333333", "444444444", "555555555", "666666666","777777777",
             "888888888","999999999","123456789","987654321"]
     try:
-        if (entry.member_ssn in invalid_ssns or entry.member_ssn!=9 or entry.member_ssn.isdigit()!=True):
+        if (getattr(entry,field_name) in invalid_ssns or getattr(entry,field_name)!=9 or getattr(entry,field_name).isdigit()!=True):
             return ValidationResult(entry, 'failed', 'Invalid SSN')
         else:
             return ValidationResult(entry, 'passed')
@@ -60,9 +60,9 @@ def valid_ssn(entry):
         return ValidationResult(entry,"failed")
 
 
-def valid_first_name(entry):
+def valid_first_name(entry,field_name):
     try:
-        if(no_spaces(entry.first_name) and title_case(entry.first_name) and entry.first_name.isalpha()):
+        if(no_spaces(getattr(entry,field_name)) and title_case(getattr(entry,field_name)) and getattr(entry,field_name).isalpha()):
             return ValidationResult(entry, 'passed')
         else:
             return ValidationResult(entry, 'failed','invalid first name')
@@ -70,9 +70,9 @@ def valid_first_name(entry):
         return ValidationResult(entry, 'failed', 'invalid first name')
 
 
-def valid_last_name(entry):
+def valid_last_name(entry,field_name):
     try:
-        if(no_spaces(entry.last_name) and title_case(entry.last_name) and entry.last_name.isalpha()):
+        if(no_spaces(getattr(entry,field_name)) and title_case(getattr(entry,field_name)) and getattr(entry,field_name).isalpha()):
             return ValidationResult(entry, 'passed')
         else:
             return ValidationResult(entry, 'failed','invalid last name')
@@ -80,8 +80,8 @@ def valid_last_name(entry):
         return ValidationResult(entry, 'failed', 'invalid first name')
 
 
-def valid_email(entry):
-    if (validate_email(entry.email) and no_spaces(entry.email)):
+def valid_email(entry,field_name):
+    if (validate_email(getattr(entry,field_name)) and no_spaces(getattr(entry,field_name))):
         return ValidationResult(entry, 'passed')
 
     else:

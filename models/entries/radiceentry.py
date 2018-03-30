@@ -31,11 +31,6 @@ class RadiceEntry:
             self.zip_code =str(row_object["zip_code"])
 
 
-    #def return_fields(self):
-    #    self.entry_dic ={}
-    #    for attr, value in self.__dict__.items():
-    #        self.entry_dic[attr]=value
-    #    return self.entry_dic
 
 
     #Returns an array of the dictionary if needed.

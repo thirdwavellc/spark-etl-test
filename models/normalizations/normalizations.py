@@ -15,55 +15,55 @@ class Normalizer:
         self.normalizations = normalizations
 
     def normalize(self):
-        list(map(lambda normalization: normalization(self.entry), self.normalizations))
+        list(map(lambda normalization: normalization[0](self.entry,normalization[1]), self.normalizations))
 
 
-def normalize_coverage_start_date(entry):
-    entry.coverage_start_date = normalize_date(entry.coverage_start_date)
+def normalize_coverage_start_date(entry,field_name):
+    setattr(entry,field_name,normalize_date(getattr(entry,field_name)))
 
 
-def normalize_coverage_end_date(entry):
-    entry.coverage_start_date = normalize_date(entry.coverage_end_date)
+def normalize_coverage_end_date(entry,field_name):
+    setattr(entry,field_name,normalize_date(getattr(entry,field_name)))
 
 
-def normalize_date_of_birth(entry):
-    entry.date_of_birth = normalize_date(entry.date_of_birth)
+def normalize_date_of_birth(entry,field_name):
+    setattr(entry,field_name,normalize_date(getattr(entry,field_name)))
 
 #removes spaces and make name titlecase
-def normalize_first_name(entry):
-        spaces_removed_first_name = remove_spaces(entry.first_name)
+def normalize_first_name(entry,field_name):
+        spaces_removed_first_name = remove_spaces(getattr(entry,field_name))
         normalized_first_name = title_case(spaces_removed_first_name)
-        entry.first_name = normalized_first_name
+        setattr(entry,field_name,normalized_first_name)
 
 
 #removes spaces, makes title case and removes and suffixes
-def normalize_last_name(entry):
-        spaces_removed_last_name = remove_spaces(entry.last_name)
+def normalize_last_name(entry,field_name):
+        spaces_removed_last_name = remove_spaces(getattr(entry,field_name))
         title_case_no_spaces = title_case(spaces_removed_last_name)
         normalized_last_name = remove_suffix(title_case_no_spaces)
-        entry.last_name = normalized_last_name
+        setattr(entry,field_name, normalized_last_name)
 
 #removes spaces from the email
-def normalize_email(entry):
-    entry.email = remove_spaces(entry.email)
+def normalize_email(entry,field_name):
+    setattr(entry,field_name,remove_spaces(getattr(entry,field_name)))
 
 
 #utilizes the zipcodes python lib that returns a dictionary. One of the items is a 5 digit zip. Even if user inputs longer zip version it will return 5 digit zip
-def normalize_zip(entry):
+def normalize_zip(entry,field_name):
         try:
-                zip_code_normal = zipcodes.matching(entry.zip_code)[0]['zip_code']
-                entry.zip_code = zip_code_normal
+                zip_code_normal = zipcodes.matching(getattr(entry,field_name))[0]['zip_code']
+                setattr(entry,field_name,zip_code_normal)
         except:
-                entry.zip_code = None
+                setattr(entry,field_name,None)
 
-def phone_strip_nondigits(entry):
-    entry.phone = re.sub('[^0-9]','', entry.phone)
+def phone_strip_nondigits(entry,field_name):
+    setattr(entry,field_name,re.sub('[^0-9]','', getattr(entry,field_name)))
 
-def normalize_state(entry):
+def normalize_state(entry,field_name):
     try:
-        entry.state = entry.state.upper()
+        setattr(entry,field_name,getattr(entry,field_name).upper())
     except:
-        entry.state = None
+        setattr(entry,field_name, None)
 
 
 
