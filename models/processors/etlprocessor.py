@@ -4,8 +4,6 @@ import math
 import operator
 import csv
 import sys
-from pyspark.sql.types import *
-from pyspark.sql import SparkSession
 import paramiko
 from ..validations import validations as valid
 from ..normalizations import normalizations as norm

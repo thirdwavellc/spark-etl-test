@@ -4,7 +4,7 @@ from ..validations import validations as valid
 from ..normalizations import normalizations as norm
 import etlprocessor as etlprocessor
 from .. import helpfunctions as helper
-from ..entries import radiceentry as radiceentry
+from ..entries import radice as entries
 
 class RadiceEtlProcessor(etlprocessor.EtlProcessor):
     def __init__(self, data_source, schema):
@@ -32,7 +32,7 @@ class RadiceEtlProcessor(etlprocessor.EtlProcessor):
 
     # TODO: move to entry static method?
     def create_entries(self):
-        return list(map(lambda data_frame: radiceentry.RadiceEntry(data_frame, self.schema), self.data_frame_list))
+        return list(map(lambda data_frame: entries.EligibilityEntry(data_frame, self.schema), self.data_frame_list))
 
     def export(self):
         valid_entries_dic= list(map(lambda validator:self.return_fields(validator),self.valid_validators))

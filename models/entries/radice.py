@@ -1,5 +1,5 @@
 
-class RadiceEntry:
+class EligibilityEntry:
     def __init__(self, row_object, eligibility_schema):
             #created a variable for each field just for backup for now (was thinking of removing these and just using a single dictionary for easier customization for individual clients)
             self.source_id = str(row_object["source_id"])

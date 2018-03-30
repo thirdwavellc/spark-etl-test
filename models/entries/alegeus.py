@@ -1,6 +1,6 @@
 
-class AlegeusEntry:
-    def __init__(self, row_object, eligibility_schema):
+class CensusEntry:
+    def __init__(self, eligibility_entry, eligibility_schema):
             #created a variable for each field just for backup for now (was thinking of removing these and just using a single dictionary for easier customization for individual clients)
             self.source_id = str(row_object["source_id"])
             self.client_name = str(row_object["client_name"])
