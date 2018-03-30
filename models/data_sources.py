@@ -21,10 +21,11 @@ class LocalFileSparkDataSource:
 class SftpSparkDataSource:
     def __init__(self, spark_session, schema, sftp_connection, file_path, header=0, sep='|'):
         self.spark_session = spark_session
+        self.schema= schema
         self.data = pandas.read_csv(sftp_connection.open_file(file_path), sep=sep, header=header)
 
     def data_frames(self):
-        return((self.spark_session.createDataFrame(data,schema)).collect())
+        return((self.spark_session.createDataFrame(self.data,self.schema)).collect())
 
 class SftpConnection:
     def __init__(self, hostname, username, key_path):

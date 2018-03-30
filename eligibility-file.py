@@ -2,6 +2,9 @@
 from models.processors.radiceetlprocessor import RadiceEtlProcessor
 from models.data_sources import SftpConnection, SftpSparkDataSource
 import models.schemas.radice as schemas
+from pyspark.sql.types import *
+from pyspark.sql import SparkSession
+
 
 def main():
     app_name = 'PySparkEligibiltyFile'
