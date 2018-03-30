@@ -1,40 +1,15 @@
-import os
-from datetime import date
-import math
-import operator
+
 from pyspark.sql.types import *
-from pyspark.sql import SparkSession
-import csv
-import json
-import sys
-import paramiko
 import validations.validations as valid
-import entry as entry
 import normalizations.normalizations as norm
 import etlprocessor as etlprocessor
-import pandas
-
-def get_file_from_sftp(key_path,username):
-    p_key = paramiko.RSAKey.from_private_key_file(key_path)
-    con = paramiko.SSHClient()
-    con.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    con.connect( hostname = "ec2-34-206-40-147.compute-1.amazonaws.com", username = username, pkey = p_key )
-    sftp_con = con.open_sftp()
-    return (sftp_con.open('/uploads/radice/eligibility-sample.txt'))
-
-# TODO: move into library
-def get_data_frame_list(schema,app_name):
-    spark = SparkSession\
-           .builder\
-           .appName(app_name)\
-           .getOrCreate()
-    data = pandas.read_csv(get_file_from_sftp('/home/max/Downloads/radice-sftp.pem','radice'),sep='|',header=0)
-    return((spark.createDataFrame(data,schema)).collect())
+import helpfunctions as helper
+import entries.radiceentry as radiceentry
 
 
 class RadiceEtlProcessor(etlprocessor.EtlProcessor):
     def __init__(self):
-        self.data_frame_list = get_data_frame_list(self.eligibility_schema(),"PySparkEligibiltyFile")
+        self.data_frame_list = helper.get_data_frame_list(self.eligibility_schema(),"PySparkEligibiltyFile")
         self.entries = self.create_entries()
         self.normalizations = [
         norm.normalize_date_of_birth,
@@ -54,12 +29,15 @@ class RadiceEtlProcessor(etlprocessor.EtlProcessor):
         valid.valid_email
         ]
 
+    def create_entries(self):
+        return list(map(lambda data_frame: radiceentry.RadiceEntry(data_frame, self.eligibility_schema()), self.data_frame_list))
+
     def export(self):
+
         valid_entries_dic= list(map(lambda validator:self.return_fields(validator),self.valid_validators))
         invalid_entries_dic= list(map(lambda validator:self.return_fields(validator),self.invalid_validators))
-
-        self.file_partition_size(valid_entries_dic,1000000,'json/clienta/passedentries')
-        self.file_partition_size(invalid_entries_dic,1000000,'json/clienta/failedentries')
+        helper.file_partition_size(valid_entries_dic,1000000,'json/radice/passedentries')
+        helper.file_partition_size(invalid_entries_dic,1000000,'json/radice/failedentries')
 
     def eligibility_schema(self):
         '''Defines schema in Eligibility file for CSV ingestion (assuming no header present)'''
