@@ -3,7 +3,6 @@
 spark-2.2.1-bin-hadoop2.7
 spark-2.2.1-bin-hadoop2.7.tgz
 spark-warehouse
-eligibility-sample-*
 lib/
 pyvenv.cfg
 bin/activate*
@@ -11,5 +10,5 @@ bin/easy_install*
 bin/pip*
 bin/python*
 metastore_db/
-failedentries/*
-passedentries/*
+output/**/failed/*
+output/**/passed/*
