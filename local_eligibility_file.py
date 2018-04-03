@@ -1,4 +1,4 @@
-'''Converts sample Eligibilty file into JSON'''
+'''Converts sample Eligibilty file into JSON using local data source'''
 from models.processors.radice import RadiceEtlProcessor
 from models.data.sources import LocalFileSparkDataSource
 import models.schemas.radice as schemas

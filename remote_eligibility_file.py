@@ -1,4 +1,4 @@
-'''Converts sample Eligibilty file into JSON'''
+'''Converts sample Eligibilty file into JSON using sftp data source'''
 from models.processors.radice import RadiceEtlProcessor
 from models.data.sources import SftpConnection, SftpSparkDataSource
 import models.schemas.radice as schemas
