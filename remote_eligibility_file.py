@@ -7,6 +7,8 @@ from models.exporters.alegeus import CensusExporter
 from models.data.destinations import LocalFileDataWriter
 from pyspark.sql.types import *
 from pyspark.sql import SparkSession
+import os
+from pathlib import Path
 
 
 def main():
@@ -17,8 +19,7 @@ def main():
 
     sftp_hostname = 'ec2-34-206-40-147.compute-1.amazonaws.com'
     sftp_user = 'radice'
-    # TODO: find a location for this that's not user-specific
-    key_path = '/home/max/Downloads/radice-sftp.pem'
+    key_path = os.path.join(Path.home(), 'radice-sftp.pem')
     sftp_connection = SftpConnection(sftp_hostname, sftp_user, key_path)
 
     file_name = '/uploads/radice/eligibility-sample.txt'
