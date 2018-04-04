@@ -29,6 +29,7 @@ class EtlProcessor:
         self.invalid_validators = filter(lambda validator: validator.has_errors(), self.validators)
         self.valid_entries = list(map(lambda validator: validator.entry, self.valid_validators))
         self.invalid_entries = list(map(lambda validator: validator.entry, self.invalid_validators))
+        
 
     def export(self, exporters):
         for exporter in exporters:
