@@ -1,4 +1,3 @@
-# TODO: evaluate argparse.Namespace for simple value objects
 class EligibilityEntry:
 
     def __init__(self, row_object):
@@ -29,6 +28,43 @@ class EligibilityEntry:
             self.city = str(row_object["city"])
             self.state = str(row_object["state"])
             self.zip_code = str(row_object["zip_code"])
+
+    def to_alegeus_dict(self):
+        # TODO: evaluate required keys
+        return {
+            'record_header': 'FE',
+            'tpa_id': '',
+            'employer_id': 'ABC' + self.group_number,
+            'employee_id': self.member_id,
+            'prefix': '',
+            'last_name': self.last_name,
+            'first_name': self.first_name,
+            'middle_initial': '',
+            'phone': '',
+            'address_line_1': self.address_line_1,
+            'address_line_2': self.address_line_2,
+            'city': self.city,
+            'state': self.state,
+            'zip': self.zip_code,
+            'country': 'US',
+            'email': self.email,
+            'gender': self.gender,
+            'martial_status': '',
+            'birth_date': self.date_of_birth,
+            'employee_ssn': self.member_ssn,
+            'hdhp_eligible': '',
+            'drivers_license_number': '',
+            'mothers_maiden_name': '',
+            'base_salary': '',
+            'eligibility_date': self.coverage_start_date,
+            'original_hire_date': '',
+            'employment_type': '',
+            'division': '',
+            'employee_citizenship_status': '',
+            'class_name': '',
+            'record_track_number': '',
+            'wealthcare_marketplace_employee_id': ''
+        }
 
     @staticmethod
     def from_data_frame_list(data_frame_list):
