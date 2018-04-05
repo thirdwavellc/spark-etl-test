@@ -1,4 +1,6 @@
 '''Converts sample Eligibilty file into JSON using local data source'''
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from models.processors.radice import RadiceEtlProcessor
 from models.data.sources import LocalFileSparkDataSource
 import models.schemas.radice as schemas
@@ -7,7 +9,6 @@ from models.exporters.alegeus import CensusExporter
 from models.data.destinations import LocalFileDataWriter
 from pyspark.sql.types import *
 from pyspark.sql import SparkSession
-import os
 
 
 def main():
@@ -26,8 +27,8 @@ def main():
     exporters = [
         EligibilityExporter(etl_process.valid_entries, LocalFileDataWriter('output/radice/yaro/passed/data.json')),
         EligibilityExporter(etl_process.invalid_entries, LocalFileDataWriter('output/radice/yaro/failed/data.json')),
-        CensusExporter(etl_process.valid_entries, LocalFileDataWriter('output/radice/alegeus/passed/data')),
-        CensusExporter(etl_process.invalid_entries, LocalFileDataWriter('output/radice/alegeus/failed/data'))
+        CensusExporter(etl_process.valid_entries, LocalFileDataWriter('output/radice/alegeus/passed/data.json')),
+        CensusExporter(etl_process.invalid_entries, LocalFileDataWriter('output/radice/alegeus/failed/data.json'))
     ]
     etl_process.export(exporters)
 

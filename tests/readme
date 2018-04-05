@@ -1,0 +1,10 @@
+to run normalization test
+ 
+python test_normalizations.py
+
+
+to run validation test
+
+python test_validations.py
+
+

@@ -2,10 +2,12 @@ import os, sys
 import time
 from validate_email import validate_email
 import datetime
+import zipcodes
 
 class ValidationResult:
-    def __init__(self, entry, status, error=''):
-        self.entry = entry
+    def __init__(self, status,field_value,field_name, error=''):
+        self.field_value = field_value
+        self.field_name = field_name
         self.status = status
         self.error = error
 
@@ -25,71 +27,96 @@ class Validator:
         return (len(self.errors) > 0)
 
     def validate(self):
-        validation_results = list(map(lambda validation: validation[0](self.entry,validation[1]), self.validations))
-        failed_validations = list(filter(lambda validation: validation.failed(), validation_results))
-        self.errors = failed_validations
+        validation_results = list(map(lambda validation: validation[0](getattr(self.entry,validation[1]),validation[1]), self.validations))
+        failed_validations = list(filter(lambda validation: validation.status =="failed", validation_results))
+        self.errors = list(map(lambda failed_validation: [failed_validation.field_name,failed_validation.field_value,failed_validation.error],failed_validations))
+        print(self.errors)
         return self
 
 
 
-def valid_dob(entry,field_name):
+def valid_dob(field_value,field_name):
     try:
         #check that dob is in the right format
-        valid_date = time.strptime(getattr(entry,field_name),'%Y%m%d')
+        valid_date = time.strptime(field_value,'%Y%m%d')
         now = time.time()
-        dob = (int(getattr(entry,field_name)[0:4]),int(getattr(entry,field_name)[4:6]),int(getattr(entry,field_name)[6:8]),0,0,0,0,0,0)
+        dob = (int(field_value[0:4]),int(field_value[4:6]),int(field_value[6:8]),0,0,0,0,0,0)
         dob_to_seconds = time.mktime(dob)
         #make sure dob isn't in the future
         if dob_to_seconds<now:
-            return ValidationResult(entry, 'passed')
+            return ValidationResult('passed',field_value,field_name)
         else:
-            return ValidationResult(entry, 'failed', 'Invalid Date of Birth')
+            return ValidationResult( 'failed',field_value,field_name,'Your not from the future')
     except ValueError:
-        return ValidationResult(entry, 'failed', 'Invalid Date of Birth')
+        return ValidationResult('failed',field_value,field_name, 'Wrong date format or invalid characters were used')
 
 
-def valid_ssn(entry,field_name):
+def valid_ssn(field_value,field_name):
     invalid_ssns = ["111111111", "222222222","333333333", "444444444", "555555555", "666666666","777777777",
             "888888888","999999999","123456789","987654321"]
     try:
-        if (getattr(entry,field_name) in invalid_ssns or getattr(entry,field_name)!=9 or getattr(entry,field_name).isdigit()!=True):
-            return ValidationResult(entry, 'failed', 'Invalid SSN')
+        if (field_value in invalid_ssns or len(field_value)!=9 or field_value.isdigit()!=True):
+            return ValidationResult( 'failed',field_value, field_name,  'Invalid SSN')
         else:
-            return ValidationResult(entry, 'passed')
+            return ValidationResult( 'passed',field_value,field_name)
     except:
-        return ValidationResult(entry,"failed")
+        return ValidationResult('failed',field_value,field_name, 'Invalid SSN')
 
 
-def valid_first_name(entry,field_name):
+def valid_first_name(field_value,field_name):
     try:
-        if(no_spaces(getattr(entry,field_name)) and title_case(getattr(entry,field_name)) and getattr(entry,field_name).isalpha()):
-            return ValidationResult(entry, 'passed')
+        if(no_spaces(field_value) and title_case(field_value) and field_value.isalpha()):
+            return ValidationResult('passed',field_value)
         else:
-            return ValidationResult(entry, 'failed','invalid first name')
+            return ValidationResult('failed',field_value,field_name,'Unexpected spacing, not title case or name contains non alphabetic characters')
     except:
-        return ValidationResult(entry, 'failed', 'invalid first name')
+        return ValidationResult( 'failed',field_value,field_name, 'Something went terribly wrong')
 
 
-def valid_last_name(entry,field_name):
+def valid_last_name(field_value,field_name):
     try:
-        if(no_spaces(getattr(entry,field_name)) and title_case(getattr(entry,field_name)) and getattr(entry,field_name).isalpha()):
-            return ValidationResult(entry, 'passed')
+        if(no_spaces(field_value) and title_case(field_value) and field_value.isalpha()):
+            return ValidationResult('passed')
         else:
-            return ValidationResult(entry, 'failed','invalid last name')
+            return ValidationResult( 'failed',field_value,field_name, 'Unexpected spacing, not title case or name contains non alphabetic characters')
     except:
-        return ValidationResult(entry, 'failed', 'invalid first name')
+        return ValidationResult( 'failed',field_value,field_name, 'Something went terribly wrong')
 
 
-def valid_email(entry,field_name):
-    if (validate_email(getattr(entry,field_name)) and no_spaces(getattr(entry,field_name))):
-        return ValidationResult(entry, 'passed')
+def valid_email(field_value,field_name):
+    if (validate_email(field_value) and no_spaces(field_value)):
+        return ValidationResult( 'passed',field_value,field_name)
 
     else:
-        return ValidationResult(entry, 'failed','invalid email')
+        return ValidationResult( 'failed',field_value,field_name,'invalid email')
 
+
+def valid_zip(field_value,field_name):
+    try:
+        zip_code_normal = zipcodes.matching(getattr(entry,field_value))
+
+        return ValidationResult('passed',field_value,field_name)
+    except:
+        return ValidationResult('failed',field_value,field_name)
+
+
+
+def valid_state(field_value,field_name):
+    attribute = getattr(entry,field_value)
+    if(len(attribute)==2 and attribute.isupper()):
+        return ValidationResult('passed',field_value,field_name)
+    else:
+        return ValidationResult('failed',field_value,field_name,'invalid state')
 
 
 #General functions
+def valid_date_format(date):
+    print(date[0])
+    if (len(date)==8 and date.isdigit() and (date[0]=="2" or date[0]=="1")):
+        return True
+    else:
+        return False
+
 def no_spaces(field):
     if (' ' in field) == True:
         return(False)
