@@ -18,16 +18,18 @@ class ValidationResult:
         self.status == 'failed'
 
 class Validator:
-    def __init__(self, entry, validations=[]):
+    def __init__(self, entry,entries, validations=[]):
         self.entry = entry
+        self.entries = entries
         self.validations = validations
         self.errors = []
-
     def has_errors(self):
         return (len(self.errors) > 0)
 
     def validate(self):
         validation_results = list(map(lambda validation: validation[0](getattr(self.entry,validation[1]),validation[1]), self.validations))
+        orphan_validation = not_orphaned(self.entry,self.entries,self.entry.rel_to_subscriber)
+        validation_results.append(orphan_validation)
         failed_validations = list(filter(lambda validation: validation.status =="failed", validation_results))
         self.errors = list(map(lambda failed_validation: [failed_validation.field_name,failed_validation.field_value,failed_validation.error],failed_validations))
         return self
@@ -108,9 +110,21 @@ def valid_state(field_value,field_name):
         return ValidationResult('failed',field_value,field_name,'invalid state')
 
 
+def not_orphaned(entry, entries,rel_to_subscriber):
+    not_orphan=False
+    for entry_other in entries:
+        if ((entry.ins_subscriber_id == entry_other.ins_subscriber_id) and (entry_other.rel_to_subscriber =="0")):
+            not_orphan=True
+    if not_orphan:
+        return ValidationResult('passed',rel_to_subscriber,'rel_to_subscriber')
+    else:
+        return ValidationResult('failed',rel_to_subscriber,'rel_to_subscriber','is orphan')
+
+
+
+
 #General functions
 def valid_date_format(date):
-    print(date[0])
     if (len(date)==8 and date.isdigit() and (date[0]=="2" or date[0]=="1")):
         return True
     else:

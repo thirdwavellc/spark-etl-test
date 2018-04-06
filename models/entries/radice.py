@@ -29,7 +29,7 @@ class EligibilityEntry:
             self.state = str(row_object["state"])
             self.zip_code = str(row_object["zip_code"])
 
-    def to_alegeus_dict(self):
+    def to_alegeus_census_dict(self):
         # TODO: evaluate required keys
         return {
             'record_header': 'FE',
@@ -66,6 +66,68 @@ class EligibilityEntry:
             'wealthcare_marketplace_employee_id': ''
         }
 
+    def to_alegeus_demographics_dict(self):
+        return{
+            'record_id':'IB',
+            'tpa_id':'',
+            'employer_id': 'ABC' + self.group_number,,
+            'employee_id':self.member_id,
+            'prefix':'',
+            'last_name':self.last_name,
+            'first_name':self.first_name,
+            'middle_initial':'',
+            'phone':'',
+            'mobile_number':'',
+            'address_line_1':self.address_line_1,
+            'address_line_2':self.address_line_2,
+            'city':self.city,
+            'state':self.state,
+            'zip':self.zip_code,
+            'country':'US',
+            'reimbursment_method':'',
+            'email':self.email,
+            'user_defined_field':'',
+            'employee_status':'',
+            'gender':self.gender,
+            'martial_status':'',
+            'shipping_address_line_1':'',
+            'shipping_address_line_2':'',
+            'shipping_address_city':'',
+            'shipping_address_state':'',
+            'shipping_address_zip':'',
+            'shipping_address_country':'',
+            'birth_date':self.date_of_birth,
+            'bank_routing_number':'',
+            'bank_account_number':'',
+            'bank_account_type_code':'',
+            'bank_name':'',
+            'remarks':'',
+            'employee_ssn':self.employee_ssn,
+            'health_plan_id':,''
+            'dental_id':'',
+            'vision_id':'',
+            'pbm_id':'',
+            'health_coverage_default':'',
+            'medical_coverage':'',
+            'pharmacy_coverage':'',
+            'dental_coverage':'',
+            'hospital_coverage':'',
+            'vision_coverage':'',
+            'hearing_coverage':'',
+            'card_design':'',
+            'high_deductible_health_plan_eligible':'',
+            'employee_drivers_license_number':'',
+            'employee_mother_maiden_name':'',
+            'communication_options':'',
+            'medicare_beneficiary':'',
+            'medicare_id':'',
+            'record_tracking_number':'',
+            'employee_processing_notes':'',
+            'mobile_communication_options':'',
+            'person_code':'',
+            'end_state_renal_disease':'',
+            'wealthcare_marketplace_employee_id':'',
+        }
 
     def from_data_frame_list(data_frame_list):
         print(len(list(map(lambda data_frame: EligibilityEntry(data_frame),

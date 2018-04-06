@@ -1,3 +1,4 @@
+Bridges|Bridges, Campbell and James|MEM|20180406|||0|Savage|Joyce |1999-09-20|M|Medical|ES||TILG9928330798733|TILG9928330798733 001|54382237|Example HMO|2018-04-01|2019-03-01|True|Joyce Savage@gmail.com|6666 Wilson Union||Hallhaven|FL|76369
 Bridges|Bridges, Campbell and James|MEM|20180406|||1|Savage|David |1986-03-12|F|Medical|ES||TILG9928330798733|TILG9928330798733 002|54382237|Example HMO|2018-04-01|2019-03-01|True|David Savage@aol.com|||||
 Bridges|Bridges, Campbell and James|MEM|20180406|||0|Castillo|Sheil a|1962-06-26|F|Medical|EF||VBGA5948788718894|VBGA5948788718894 001|99862565|Example PPO|2018-04-01|2019-03-01|True|Sheil aCastillo@yahoo.com|913 Christina Point Apt. 639|Suite 024|Port Kathyfurt|MI|09682
 Bridges|Bridges, Campbell and James|MEM|20180406|||1|Castillo|L aura|1969-04-22|F|Medical|EF||VBGA5948788718894|VBGA5948788718894 002|99862565|Example PPO|2018-04-01|2019-03-01|True|L auraCastillo@aol.com|||||
