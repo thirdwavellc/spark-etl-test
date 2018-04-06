@@ -18,21 +18,21 @@ class LocalFileSparkDataSource:
                         .option("treatEmptyValuesAsNulls", "true") \
                         .load(data_file) \
 
-    def data_frames(self):
+    def to_row_list(self):
         return self.data.collect()
 
 
 class SftpSparkDataSource:
 
     def __init__(self, spark_session, schema, sftp_connection, file_path,
-                 header=0, sep='|'):
+                 header=None, sep='|'):
         self.spark_session = spark_session
         self.schema = schema
         self.data = pandas.read_csv(sftp_connection.open_file(file_path),
                                     sep=sep,
-                                    header=header)
+                                    header=header,dtype=str)
 
-    def data_frames(self):
+    def to_row_list(self):
         return((self.spark_session.createDataFrame(self.data, self.schema))
                .collect())
 

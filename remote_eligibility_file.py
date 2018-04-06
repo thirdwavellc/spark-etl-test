@@ -30,8 +30,8 @@ def main():
     exporters = [
         EligibilityExporter(etl_process.valid_entries, LocalFileDataWriter('output/radice/yaro/passed/data.json')),
         EligibilityExporter(etl_process.invalid_entries, LocalFileDataWriter('output/radice/yaro/failed/data.json')),
-        CensusExporter(etl_process.valid_entries, LocalFileDataWriter('output/radice/alegeus/passed/data')),
-        CensusExporter(etl_process.invalid_entries, LocalFileDataWriter('output/radice/alegeus/failed/data'))
+        CensusExporter(etl_process.valid_entries, LocalFileDataWriter('output/radice/alegeus/passed/data.json')),
+        CensusExporter(etl_process.invalid_entries, LocalFileDataWriter('output/radice/alegeus/failed/data.json'))
     ]
     etl_process.export(exporters)
 

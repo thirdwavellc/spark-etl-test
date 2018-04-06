@@ -50,6 +50,7 @@ def normalize_email(entry,field_name):
 
 #utilizes the zipcodes python lib that returns a dictionary. One of the items is a 5 digit zip. Even if user inputs longer zip version it will return 5 digit zip
 def normalize_zip(entry,field_name):
+
         try:
                 zip_code_normal = zipcodes.matching(getattr(entry,field_name))[0]['zip_code']
                 setattr(entry,field_name,zip_code_normal)
@@ -73,7 +74,6 @@ def normalize_state(entry,field_name):
 def normalize_date(date):
         whitelist = set('0123456789')
         normalized_date = ''.join(filter(whitelist.__contains__, date))
-
         return(str(normalized_date))
 
 def remove_spaces(string):

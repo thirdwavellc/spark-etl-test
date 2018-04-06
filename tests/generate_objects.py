@@ -5,8 +5,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pyspark.sql.types import *
 from pyspark.sql import SparkSession
 import models.schemas.radice as schemas
-from models.data_sources import *
-from models.processors.radiceetlprocessor import *
+from models.data import *
+from models.processors.radice import *
 from models.entries.radice import *
 from models.schemas.radice import *
 

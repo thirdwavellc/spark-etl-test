@@ -66,7 +66,9 @@ class EligibilityEntry:
             'wealthcare_marketplace_employee_id': ''
         }
 
-    @staticmethod
+
     def from_data_frame_list(data_frame_list):
+        print(len(list(map(lambda data_frame: EligibilityEntry(data_frame),
+                        data_frame_list))))
         return list(map(lambda data_frame: EligibilityEntry(data_frame),
                         data_frame_list))

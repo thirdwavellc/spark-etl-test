@@ -25,11 +25,11 @@ class EtlProcessor:
 
     def validate(self):
         self.validators = list(map(lambda entry: valid.Validator(entry, self.validations).validate(), self.entries))
-        self.valid_validators = filter(lambda validator: not validator.has_errors(), self.validators)
-        self.invalid_validators = filter(lambda validator: validator.has_errors(), self.validators)
+        self.valid_validators = list(filter(lambda validator: validator.has_errors() == False, self.validators))
+        self.invalid_validators = list(filter(lambda validator: validator.has_errors() == True, self.validators))
         self.valid_entries = list(map(lambda validator: validator.entry, self.valid_validators))
         self.invalid_entries = list(map(lambda validator: validator.entry, self.invalid_validators))
-        
+
 
     def export(self, exporters):
         for exporter in exporters:
