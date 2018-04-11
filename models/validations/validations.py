@@ -6,6 +6,7 @@ import zipcodes
 
 class ValidationResult:
     def __init__(self, status,field_value,field_name, error=''):
+
         self.field_value = field_value
         self.field_name = field_name
         self.status = status
@@ -18,25 +19,66 @@ class ValidationResult:
         self.status == 'failed'
 
 class Validator:
-    def __init__(self, entry,entries, validations=[]):
+    def __init__(self, entry, validations=[]):
+        """This object takes an custom entry object and an array of validation to perform on the entry
+
+        Note:
+
+        Args:
+            entry: Custom Entry Object (Ex.EligibilityEntry, CensusEntry)
+            validations: array of validation functions
+        """
         self.entry = entry
-        self.entries = entries
         self.validations = validations
         self.errors = []
+
     def has_errors(self):
+        """Checks to see if the validator has any error from the entry
+
+        Args:
+            None
+        Yields:
+            returns boolean
+        """
         return (len(self.errors) > 0)
 
+    def get_errors(self):
+        """Returns array of errors
+
+        Args:
+            None
+        Yields:
+            returns array
+        """
+        return(self.errors)
+
     def validate(self):
+        """Performs the validation on the entry object to check the validations assigned in the validation array
+
+        Args:
+            None
+        Yields:
+            returns self
+        """
         validation_results = list(map(lambda validation: validation[0](getattr(self.entry,validation[1]),validation[1]), self.validations))
-        orphan_validation = not_orphaned(self.entry,self.entries,self.entry.rel_to_subscriber)
-        validation_results.append(orphan_validation)
+        #orphan_validation = not_orphaned(self.entry,self.entries,self.entry.rel_to_subscriber)
+        #validation_results.append(orphan_validation)
         failed_validations = list(filter(lambda validation: validation.status =="failed", validation_results))
-        self.errors = list(map(lambda failed_validation: [failed_validation.field_name,failed_validation.field_value,failed_validation.error],failed_validations))
+        self.errors =  list(map(lambda failed_validation: [failed_validation.field_name,failed_validation.field_value,failed_validation.error],failed_validations))
         return self
 
 
-
 def valid_dob(field_value,field_name):
+    """Validates the date of birth by making sure it isn't in the future and that it is in the correct format of year month date (Ex. 20180102)
+
+    Notes:
+        Uses try to protect against failed inputs for the time.strptime function
+    Args:
+        field_value:str
+        field_name:str
+    Yields:
+        returns Validation Result Object
+    """
     try:
         #check that dob is in the right format
         valid_date = time.strptime(field_value,'%Y%m%d')
@@ -53,6 +95,14 @@ def valid_dob(field_value,field_name):
 
 
 def valid_ssn(field_value,field_name):
+    """Validates the ssn by making sure it is 9 digits, is all digits and isnt part of the invalid ssn array
+
+    Args:
+        field_value:str
+        field_name:str
+    Yields:
+        returns Validation Result Object
+    """
     invalid_ssns = ["111111111", "222222222","333333333", "444444444", "555555555", "666666666","777777777",
             "888888888","999999999","123456789","987654321"]
     try:
@@ -110,15 +160,15 @@ def valid_state(field_value,field_name):
         return ValidationResult('failed',field_value,field_name,'invalid state')
 
 
-def not_orphaned(entry, entries,rel_to_subscriber):
-    not_orphan=False
-    for entry_other in entries:
-        if ((entry.ins_subscriber_id == entry_other.ins_subscriber_id) and (entry_other.rel_to_subscriber =="0")):
-            not_orphan=True
-    if not_orphan:
-        return ValidationResult('passed',rel_to_subscriber,'rel_to_subscriber')
-    else:
-        return ValidationResult('failed',rel_to_subscriber,'rel_to_subscriber','is orphan')
+#def not_orphaned(entry, entries,rel_to_subscriber):
+#    not_orphan=False
+#    for entry_other in entries:
+#        if ((entry.ins_subscriber_id == entry_other.ins_subscriber_id) and (entry_other.rel_to_subscriber =="0")):
+#            not_orphan=True
+#    if not_orphan:
+#        return ValidationResult('passed',rel_to_subscriber,'rel_to_subscriber')
+#    else:
+#        return ValidationResult('failed',rel_to_subscriber,'rel_to_subscriber','is orphan')
 
 
 

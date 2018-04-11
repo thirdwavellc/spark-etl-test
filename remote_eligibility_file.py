@@ -4,7 +4,7 @@ from models.data.sources import SftpConnection, SftpSparkDataSource
 import models.schemas.radice as schemas
 from models.exporters.yaro import EligibilityExporter
 from models.exporters.alegeus import CensusExporter
-from models.data.destinations import LocalFileDataWriter
+from models.data.destinations import LocalFileDataWriter, RemoteFileDataWriter, LocalCsvWriter
 from pyspark.sql.types import *
 from pyspark.sql import SparkSession
 import os
@@ -19,7 +19,8 @@ def main():
 
     sftp_hostname = 'ec2-34-206-40-147.compute-1.amazonaws.com'
     sftp_user = 'radice'
-    key_path = os.path.join(Path.home(), 'radice-sftp.pem')
+    #key_path = os.path.join(Path.home(), 'radice-sftp.pem')
+    key_path = "/home/max/Downloads/radice-sftp.pem"
     sftp_connection = SftpConnection(sftp_hostname, sftp_user, key_path)
 
     file_name = '/uploads/radice/eligibility-sample.txt'
@@ -30,8 +31,11 @@ def main():
     exporters = [
         EligibilityExporter(etl_process.valid_entries, LocalFileDataWriter('output/radice/yaro/passed/data.json')),
         EligibilityExporter(etl_process.invalid_entries, LocalFileDataWriter('output/radice/yaro/failed/data.json')),
-        CensusExporter(etl_process.valid_entries, LocalFileDataWriter('output/radice/alegeus/passed/data.json')),
-        CensusExporter(etl_process.invalid_entries, LocalFileDataWriter('output/radice/alegeus/failed/data.json'))
+        EligibilityExporter(etl_process.valid_entries, RemoteFileDataWriter(sftp_connection.connection,'uploads/radice/passed/data.json')),
+        EligibilityExporter(etl_process.invalid_entries, RemoteFileDataWriter(sftp_connection.connection,'uploads/radice/failed/data.json')),
+        CensusExporter(etl_process.valid_entries, LocalCsvWriter('output/radice/alegeus/passed/data.csv')),
+        CensusExporter(etl_process.invalid_entries, LocalCsvWriter('output/radice/alegeus/failed/data.csv')),
+
     ]
     etl_process.export(exporters)
 

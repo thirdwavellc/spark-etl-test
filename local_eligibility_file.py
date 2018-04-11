@@ -1,4 +1,5 @@
 '''Converts sample Eligibilty file into JSON using local data source'''
+
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -7,12 +8,11 @@ from models.data.sources import LocalFileSparkDataSource
 import models.schemas.radice as schemas
 from models.exporters.yaro import EligibilityExporter
 from models.exporters.alegeus import CensusExporter
-from models.data.destinations import LocalFileDataWriter, RemoteFileDataWriter
+from models.data.destinations import LocalFileDataWriter, LocalCsvWriter, RemoteFileDataWriter
 from pyspark.sql.types import *
 from pyspark.sql import SparkSession
 from models.data.sources import SftpConnection, SftpSparkDataSource
 from pathlib import Path
-
 
 
 
@@ -26,9 +26,6 @@ def main():
     #data_file = os.path.join(file_dir, 'eligibility-sample.txt')
 
     data_source = LocalFileSparkDataSource(spark_session, schemas.eligibility_file, 'eligibility-sample.txt')
-
-
-
     sftp_hostname = 'ec2-34-206-40-147.compute-1.amazonaws.com'
     sftp_user = 'radice'
     key_path = os.path.join("/home/max/Downloads/", 'radice-sftp.pem')
@@ -40,10 +37,8 @@ def main():
     exporters = [
         EligibilityExporter(etl_process.valid_entries, LocalFileDataWriter('output/radice/yaro/passed/data.json')),
         EligibilityExporter(etl_process.invalid_entries, LocalFileDataWriter('output/radice/yaro/failed/data.json')),
-        EligibilityExporter(etl_process.valid_entries, RemoteFileDataWriter(sftp_connection.connection,'uploads/radice/passed/data.json')),
-        EligibilityExporter(etl_process.invalid_entries, RemoteFileDataWriter(sftp_connection.connection,'uploads/radice/failed/data.json')),
-        CensusExporter(etl_process.valid_entries, LocalFileDataWriter('output/radice/alegeus/passed/data.json')),
-        CensusExporter(etl_process.invalid_entries, LocalFileDataWriter('output/radice/alegeus/failed/data.json'))
+        CensusExporter(etl_process.valid_entries, LocalCsvWriter('output/radice/alegeus/passed/data.csv')),
+        CensusExporter(etl_process.invalid_entries, LocalCsvWriter('output/radice/alegeus/failed/data.csv'))
     ]
     etl_process.export(exporters)
 

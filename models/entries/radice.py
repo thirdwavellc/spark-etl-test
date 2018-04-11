@@ -1,6 +1,14 @@
 class EligibilityEntry:
 
     def __init__(self, row_object):
+            """Custom object created from a spark row object
+
+            Note:
+
+            Args:
+                row_object (spark row_object): The paramter is a row object that is created by spark.
+            """
+
             self.source_id = str(row_object["source_id"])
             self.client_name = str(row_object["client_name"])
             self.field = str(row_object["field"])
@@ -29,8 +37,22 @@ class EligibilityEntry:
             self.state = str(row_object["state"])
             self.zip_code = str(row_object["zip_code"])
 
+
     def to_alegeus_census_dict(self):
+        """Takes the current object and changes the fieldnames to match the alegeus census fields
+
+        Args:
+            None
+
+        Yields:
+            dict
+
+        Examples:
+            Entry = EligibilityEntry(row_dict)
+            alegeus_dic = Entry.to_alegeus_census_dict
+        """
         # TODO: evaluate required keys
+
         return {
             'record_header': 'FE',
             'tpa_id': '',
@@ -67,10 +89,22 @@ class EligibilityEntry:
         }
 
     def to_alegeus_demographics_dict(self):
+        """Takes the current object and changes the fieldnames to match the alegeus demographics fields
+
+        Args:
+            None
+
+        Yields:
+            dict
+
+        Examples:
+            Entry = EligibilityEntry(row_dict)
+            alegeus_dic = Entry.to_alegeus_demographics_dict
+        """
         return{
             'record_id':'IB',
             'tpa_id':'',
-            'employer_id': 'ABC' + self.group_number,,
+            'employer_id': 'ABC' + self.group_number,
             'employee_id':self.member_id,
             'prefix':'',
             'last_name':self.last_name,
@@ -103,7 +137,7 @@ class EligibilityEntry:
             'bank_name':'',
             'remarks':'',
             'employee_ssn':self.employee_ssn,
-            'health_plan_id':,''
+            'health_plan_id':'',
             'dental_id':'',
             'vision_id':'',
             'pbm_id':'',
@@ -129,8 +163,15 @@ class EligibilityEntry:
             'wealthcare_marketplace_employee_id':'',
         }
 
-    def from_data_frame_list(data_frame_list):
-        print(len(list(map(lambda data_frame: EligibilityEntry(data_frame),
-                        data_frame_list))))
+    def from_data_frame_list(row_list):
+        """Returns a list of EligibilityEntry objects
+
+        Args:
+            row_list: list of spark row objects
+
+        Yields:
+            A list of spark row objects
+
+        """
         return list(map(lambda data_frame: EligibilityEntry(data_frame),
-                        data_frame_list))
+                        row_list))
