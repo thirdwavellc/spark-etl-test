@@ -44,7 +44,7 @@ class EligibilityEntry:
         Args:
             None
 
-        Yields:
+        Returns:
             dict
 
         Examples:
@@ -94,7 +94,7 @@ class EligibilityEntry:
         Args:
             None
 
-        Yields:
+        Returns:
             dict
 
         Examples:
@@ -169,7 +169,7 @@ class EligibilityEntry:
         Args:
             row_list: list of spark row objects
 
-        Yields:
+        Returns:
             A list of spark row objects
 
         """

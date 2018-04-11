@@ -22,10 +22,10 @@ def main():
                         .appName(app_name)\
                         .getOrCreate()
 
-    #file_dir = os.path.dirname(__file__)
-    #data_file = os.path.join(file_dir, 'eligibility-sample.txt')
+    file_dir = os.path.dirname(__file__)
+    data_file = os.path.join(file_dir, 'test-data.csv')
 
-    data_source = LocalFileSparkDataSource(spark_session, schemas.eligibility_file, 'eligibility-sample.txt')
+    data_source = LocalFileSparkDataSource(spark_session, schemas.eligibility_file, data_file)
     sftp_hostname = 'ec2-34-206-40-147.compute-1.amazonaws.com'
     sftp_user = 'radice'
     key_path = os.path.join("/home/max/Downloads/", 'radice-sftp.pem')

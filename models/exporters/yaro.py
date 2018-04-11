@@ -28,7 +28,7 @@ class EligibilityExporter:
         Args:
             None
 
-        Yields:
+        Returns:
             None (writes file)
 
         """

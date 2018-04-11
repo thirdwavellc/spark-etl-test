@@ -22,20 +22,19 @@ class CensusEntry:
         Args:
             None
 
-        Yields:
+        Returns:
             str
 
         """
-        print(type(json.dumps(self.__dict__)))
         return json.dumps(self.__dict__)
 
     def to_dict(self):
-        """Takes the current object, and returns a dictionary of the obejcts attributes
+        """Takes the current object, and returns a dictionary of the objects attributes
 
         Args:
             None
 
-        Yields:
+        Returns:
             dict
 
         """

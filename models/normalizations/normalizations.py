@@ -27,7 +27,7 @@ class Normalizer:
 
         Args:
             None
-        Yields:
+        Returns:
             None (modifies object)
 
         """
@@ -40,7 +40,7 @@ def normalize_coverage_start_date(entry,field_name):
     Args:
         entry:custom entry (Ex.EligibilityEntry, CensusEntry)
         field_name: str
-    Yields:
+    Returns:
         None (modifies object attr)
     """
     setattr(entry,field_name,normalize_date(getattr(entry,field_name)))
@@ -52,7 +52,7 @@ def normalize_coverage_end_date(entry,field_name):
     Args:
         entry:custom entry (Ex.EligibilityEntry, CensusEntry)
         field_name: str
-    Yields:
+    Returns:
         None (modifies object attr)
     """
     setattr(entry,field_name,normalize_date(getattr(entry,field_name)))
@@ -64,7 +64,7 @@ def normalize_date_of_birth(entry,field_name):
     Args:
         entry:custom entry (Ex.EligibilityEntry, CensusEntry)
         field_name: str
-    Yields:
+    Returns:
         None (modifies object attr)
     """
     setattr(entry,field_name,normalize_date(getattr(entry,field_name)))
@@ -76,7 +76,7 @@ def normalize_first_name(entry,field_name):
         Args:
             entry:custom entry (Ex.EligibilityEntry, CensusEntry)
             field_name: str
-        Yields:
+        Returns:
             None (modifies object attr)
         """
         spaces_removed_first_name = remove_spaces(getattr(entry,field_name))
@@ -91,7 +91,7 @@ def normalize_last_name(entry,field_name):
         Args:
             entry:custom entry (Ex.EligibilityEntry, CensusEntry)
             field_name: str
-        Yields:
+        Returns:
             None (modifies object attr)
         """
         spaces_removed_last_name = remove_spaces(getattr(entry,field_name))
@@ -106,7 +106,7 @@ def normalize_email(entry,field_name):
     Args:
         entry:custom entry (Ex.EligibilityEntry, CensusEntry)
         field_name: str
-    Yields:
+    Returns:
         None (modifies object attr)
     """
     setattr(entry,field_name,remove_spaces(getattr(entry,field_name)))
@@ -119,7 +119,7 @@ def normalize_zip(entry,field_name):
         Args:
             entry:custom entry (Ex.EligibilityEntry, CensusEntry)
             field_name: str
-        Yields:
+        Returns:
             None (modifies object attr)
         """
 
@@ -135,7 +135,7 @@ def phone_strip_nondigits(entry,field_name):
     Args:
         entry:custom entry (Ex.EligibilityEntry, CensusEntry)
         field_name: str
-    Yields:
+    Returns:
         None (modifies object attr)
     """
     setattr(entry,field_name,re.sub('[^0-9]','', getattr(entry,field_name)))
@@ -146,7 +146,7 @@ def normalize_state(entry,field_name):
     Args:
         entry:custom entry (Ex.EligibilityEntry, CensusEntry)
         field_name: str
-    Yields:
+    Returns:
         None (modifies object attr)
     """
     try:
@@ -164,7 +164,7 @@ def normalize_date(date):
 
         Args:
             date:str
-        Yields:
+        Returns:
             returns str
         """
         whitelist = set('0123456789')
@@ -176,7 +176,7 @@ def remove_spaces(string):
 
         Args:
             string:str
-        Yields:
+        Returns:
             returns str
         """
         string = string.replace(" ", "")
@@ -187,7 +187,7 @@ def title_case(string):
 
          Args:
              string:str
-         Yields:
+         Returns:
              returns str
          """
          string = string.lower().title()
@@ -198,7 +198,7 @@ def remove_suffix(string):
 
           Args:
               string:str
-          Yields:
+          Returns:
               returns str
           """
           suffixes = ["Esq", "Ii", "Iii", "Iiii", "Iv", "Jnr", "Jr", "Sr"]

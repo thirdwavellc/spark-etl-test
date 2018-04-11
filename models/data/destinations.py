@@ -20,7 +20,7 @@ class LocalFileDataWriter:
         Args:
             content:str
 
-        Yields:
+        Returns:
             None
 
         """
@@ -50,7 +50,7 @@ class LocalCsvWriter:
         Args:
             content:array of dictionaries
 
-        Yields:
+        Returns:
             None
 
         """
@@ -61,8 +61,6 @@ class LocalCsvWriter:
                 if exc.errno != errno.EEXIST:
                     raise
         if (len(content)>0):
-            print(content)
-            print(type(content))
             with open(self.path,'w') as f:
                 fieldnames = content[0].keys()
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -91,7 +89,7 @@ class RemoteFileDataWriter:
         Args:
             content:str
 
-        Yields:
+        Returns:
             None
 
         """
@@ -108,7 +106,7 @@ class RemoteFileDataWriter:
             sftp: paramikot sftp object
             path: str
 
-        Yields:
+        Returns:
             True or False
 
         """

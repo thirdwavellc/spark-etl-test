@@ -25,7 +25,6 @@ def add_alpha_char(percent,string):
         'Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w',
         'x','y','z']
         random_character = np.random.choice(characters)
-        string_length = len(string)
         random_location = random.randint(1,string_length)
         string = string[:random_location] + random_character + string[random_location:]
 

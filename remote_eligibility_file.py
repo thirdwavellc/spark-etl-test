@@ -19,8 +19,7 @@ def main():
 
     sftp_hostname = 'ec2-34-206-40-147.compute-1.amazonaws.com'
     sftp_user = 'radice'
-    #key_path = os.path.join(Path.home(), 'radice-sftp.pem')
-    key_path = "/home/max/Downloads/radice-sftp.pem"
+    key_path = os.path.join(Path.home(), 'radice-sftp.pem')
     sftp_connection = SftpConnection(sftp_hostname, sftp_user, key_path)
 
     file_name = '/uploads/radice/eligibility-sample.txt'

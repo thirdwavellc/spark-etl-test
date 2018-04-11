@@ -19,7 +19,7 @@ class ValidationResult:
         self.status == 'failed'
 
 class Validator:
-    def __init__(self, entry, validations=[]):
+    def __init__(self, entry, entries, validations=[]):
         """This object takes an custom entry object and an array of validation to perform on the entry
 
         Note:
@@ -29,6 +29,7 @@ class Validator:
             validations: array of validation functions
         """
         self.entry = entry
+        self.entries = entries
         self.validations = validations
         self.errors = []
 
@@ -37,7 +38,7 @@ class Validator:
 
         Args:
             None
-        Yields:
+        Returns:
             returns boolean
         """
         return (len(self.errors) > 0)
@@ -47,7 +48,7 @@ class Validator:
 
         Args:
             None
-        Yields:
+        Returns:
             returns array
         """
         return(self.errors)
@@ -57,12 +58,12 @@ class Validator:
 
         Args:
             None
-        Yields:
+        Returns:
             returns self
         """
         validation_results = list(map(lambda validation: validation[0](getattr(self.entry,validation[1]),validation[1]), self.validations))
-        #orphan_validation = not_orphaned(self.entry,self.entries,self.entry.rel_to_subscriber)
-        #validation_results.append(orphan_validation)
+        orphan_validation = not_orphaned(self.entry,self.entries,self.entry.rel_to_subscriber)
+        validation_results.append(orphan_validation)
         failed_validations = list(filter(lambda validation: validation.status =="failed", validation_results))
         self.errors =  list(map(lambda failed_validation: [failed_validation.field_name,failed_validation.field_value,failed_validation.error],failed_validations))
         return self
@@ -76,7 +77,7 @@ def valid_dob(field_value,field_name):
     Args:
         field_value:str
         field_name:str
-    Yields:
+    Returns:
         returns Validation Result Object
     """
     try:
@@ -100,7 +101,7 @@ def valid_ssn(field_value,field_name):
     Args:
         field_value:str
         field_name:str
-    Yields:
+    Returns:
         returns Validation Result Object
     """
     invalid_ssns = ["111111111", "222222222","333333333", "444444444", "555555555", "666666666","777777777",
@@ -160,15 +161,15 @@ def valid_state(field_value,field_name):
         return ValidationResult('failed',field_value,field_name,'invalid state')
 
 
-#def not_orphaned(entry, entries,rel_to_subscriber):
-#    not_orphan=False
-#    for entry_other in entries:
-#        if ((entry.ins_subscriber_id == entry_other.ins_subscriber_id) and (entry_other.rel_to_subscriber =="0")):
-#            not_orphan=True
-#    if not_orphan:
-#        return ValidationResult('passed',rel_to_subscriber,'rel_to_subscriber')
-#    else:
-#        return ValidationResult('failed',rel_to_subscriber,'rel_to_subscriber','is orphan')
+def not_orphaned(entry, entries,rel_to_subscriber):
+    not_orphan=False
+    for entry_other in entries:
+        if ((entry.ins_subscriber_id == entry_other.ins_subscriber_id) and (entry_other.rel_to_subscriber =="0")):
+            not_orphan=True
+    if not_orphan:
+        return ValidationResult('passed',rel_to_subscriber,'rel_to_subscriber')
+    else:
+        return ValidationResult('failed',rel_to_subscriber,'rel_to_subscriber','is orphan')
 
 
 

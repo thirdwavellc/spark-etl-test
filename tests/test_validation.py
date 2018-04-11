@@ -57,13 +57,9 @@ class TestValidationMethods(unittest.TestCase):
         self.assertEqual(valid_last_name(getattr(self.entries_true[0],"last_name"),"last_name").status,"passed")
 
     def test_valid_email_gd(self):
-        print(getattr(self.entries_false[0],"email"))
         self.assertEqual(valid_email(getattr(self.entries_true[0],"email"),"email").status,"passed")
 
     def test_valid_zip_gd(self):
-        print("here")
-        print(getattr(self.entries_true[0],"zip_code"))
-        print("there")
         self.assertEqual(valid_zip(getattr(self.entries_true[0],"zip_code"),"zip_code").status, "passed")
 
 

@@ -25,7 +25,7 @@ class CensusExporter:
         Args:
             None
 
-        Yields:
+        Returns:
             None (writes file)
 
         """
