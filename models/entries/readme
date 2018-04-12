@@ -1,0 +1,1 @@
+When creating a new client we can take a look at the basic structure used in radice.py file. The initialization of the object sets the base field names to the values we import from the eligibility file. If you need to create a new client you can simply copy the format of this file and just change the field names to whatever is required of your specific client. 

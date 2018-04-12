@@ -8,46 +8,46 @@ Changing modify acls to: max
 Changing view acls groups to: 
 Changing modify acls groups to: 
 SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(max); groups with view permissions: Set(); users  with modify permissions: Set(max); groups with modify permissions: Set()
-Successfully started service 'sparkDriver' on port 42225.
+Successfully started service 'sparkDriver' on port 34145.
 Registering MapOutputTracker
 Registering BlockManagerMaster
 Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
 BlockManagerMasterEndpoint up
-Created local directory at /tmp/blockmgr-909077e4-bf04-4edd-9911-32203f32f806
+Created local directory at /tmp/blockmgr-a2501971-ee88-4443-ba64-1dc9e2e10cd0
 MemoryStore started with capacity 366.3 MB
 Registering OutputCommitCoordinator
 Successfully started service 'SparkUI' on port 4040.
 Bound SparkUI to 0.0.0.0, and started at http://10.120.50.91:4040
-Added file file:/home/max/Work/thirdwave/zest/sparketl/spark-etl-test/./local_eligibility_file.py at spark://10.120.50.91:42225/files/local_eligibility_file.py with timestamp 1523474056082
-Copying /home/max/Work/thirdwave/zest/sparketl/spark-etl-test/local_eligibility_file.py to /tmp/spark-98c0748b-0f64-40a9-a1f3-2d8433a24afd/userFiles-49671250-8a1d-4c03-b0f7-c4fb56973934/local_eligibility_file.py
+Added file file:/home/max/Work/thirdwave/zest/sparketl/spark-etl-test/./local_eligibility_file.py at spark://10.120.50.91:34145/files/local_eligibility_file.py with timestamp 1523561138739
+Copying /home/max/Work/thirdwave/zest/sparketl/spark-etl-test/local_eligibility_file.py to /tmp/spark-88e1e38c-aa23-4d71-9ff7-81053fe44ccb/userFiles-205650b3-a365-4da1-a7a1-d031f7d6b61a/local_eligibility_file.py
 Connecting to master spark://127.0.0.1:7077...
-Successfully created connection to /127.0.0.1:7077 after 23 ms (0 ms spent in bootstraps)
-Connected to Spark cluster with app ID app-20180411141416-0073
-Executor added: app-20180411141416-0073/0 on worker-20180409112720-127.0.0.1-37197 (127.0.0.1:37197) with 8 cores
-Granted executor ID app-20180411141416-0073/0 on hostPort 127.0.0.1:37197 with 8 cores, 1024.0 MB RAM
-Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 40811.
-Server created on 10.120.50.91:40811
+Successfully created connection to /127.0.0.1:7077 after 21 ms (0 ms spent in bootstraps)
+Connected to Spark cluster with app ID app-20180412142538-0084
+Executor added: app-20180412142538-0084/0 on worker-20180409112720-127.0.0.1-37197 (127.0.0.1:37197) with 8 cores
+Granted executor ID app-20180412142538-0084/0 on hostPort 127.0.0.1:37197 with 8 cores, 1024.0 MB RAM
+Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 34651.
+Server created on 10.120.50.91:34651
 Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
-Registering BlockManager BlockManagerId(driver, 10.120.50.91, 40811, None)
-Registering block manager 10.120.50.91:40811 with 366.3 MB RAM, BlockManagerId(driver, 10.120.50.91, 40811, None)
-Executor updated: app-20180411141416-0073/0 is now RUNNING
-Registered BlockManager BlockManagerId(driver, 10.120.50.91, 40811, None)
-Initialized BlockManager: BlockManagerId(driver, 10.120.50.91, 40811, None)
+Registering BlockManager BlockManagerId(driver, 10.120.50.91, 34651, None)
+Registering block manager 10.120.50.91:34651 with 366.3 MB RAM, BlockManagerId(driver, 10.120.50.91, 34651, None)
+Registered BlockManager BlockManagerId(driver, 10.120.50.91, 34651, None)
+Initialized BlockManager: BlockManagerId(driver, 10.120.50.91, 34651, None)
+Executor updated: app-20180412142538-0084/0 is now RUNNING
 SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.0
 Setting hive.metastore.warehouse.dir ('null') to the value of spark.sql.warehouse.dir ('file:/home/max/Work/thirdwave/zest/sparketl/spark-etl-test/spark-warehouse/').
 Warehouse path is 'file:/home/max/Work/thirdwave/zest/sparketl/spark-etl-test/spark-warehouse/'.
 Registered StateStoreCoordinator endpoint
-Registered executor NettyRpcEndpointRef(spark-client://Executor) (10.120.50.91:49466) with ID 0
-Registering block manager 127.0.0.1:41611 with 366.3 MB RAM, BlockManagerId(0, 127.0.0.1, 41611, None)
+Registered executor NettyRpcEndpointRef(spark-client://Executor) (10.120.50.91:59538) with ID 0
+Registering block manager 127.0.0.1:46159 with 366.3 MB RAM, BlockManagerId(0, 127.0.0.1, 46159, None)
 Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.debug.maxToStringFields' in SparkEnv.conf.
 Pruning directories with: 
 Post-Scan Filters: 
 Output Data Schema: struct<source_id: string, client_name: string, field: string, run_date: string, employee_ssn: string ... 25 more fields>
 Pushed Filters: 
-Code generated in 138.188392 ms
+Code generated in 133.62924 ms
 Block broadcast_0 stored as values in memory (estimated size 278.0 KB, free 366.0 MB)
 Block broadcast_0_piece0 stored as bytes in memory (estimated size 23.5 KB, free 366.0 MB)
-Added broadcast_0_piece0 in memory on 10.120.50.91:40811 (size: 23.5 KB, free: 366.3 MB)
+Added broadcast_0_piece0 in memory on 10.120.50.91:34651 (size: 23.5 KB, free: 366.3 MB)
 Created broadcast 0 from collect at /home/max/Work/thirdwave/zest/sparketl/spark-etl-test/models/data/sources.py:39
 Planning scan with bin packing, max size: 4194304 bytes, open cost is considered as scanning 4194304 bytes.
 Starting job: collect at /home/max/Work/thirdwave/zest/sparketl/spark-etl-test/models/data/sources.py:39
@@ -58,17 +58,17 @@ Missing parents: List()
 Submitting ResultStage 0 (MapPartitionsRDD[2] at collect at /home/max/Work/thirdwave/zest/sparketl/spark-etl-test/models/data/sources.py:39), which has no missing parents
 Block broadcast_1 stored as values in memory (estimated size 14.4 KB, free 366.0 MB)
 Block broadcast_1_piece0 stored as bytes in memory (estimated size 7.8 KB, free 366.0 MB)
-Added broadcast_1_piece0 in memory on 10.120.50.91:40811 (size: 7.8 KB, free: 366.3 MB)
+Added broadcast_1_piece0 in memory on 10.120.50.91:34651 (size: 7.8 KB, free: 366.3 MB)
 Created broadcast 1 from broadcast at DAGScheduler.scala:1006
 Submitting 1 missing tasks from ResultStage 0 (MapPartitionsRDD[2] at collect at /home/max/Work/thirdwave/zest/sparketl/spark-etl-test/models/data/sources.py:39) (first 15 tasks are for partitions Vector(0))
 Adding task set 0.0 with 1 tasks
 Starting task 0.0 in stage 0.0 (TID 0, 127.0.0.1, executor 0, partition 0, PROCESS_LOCAL, 5315 bytes)
-Added broadcast_1_piece0 in memory on 127.0.0.1:41611 (size: 7.8 KB, free: 366.3 MB)
-Added broadcast_0_piece0 in memory on 127.0.0.1:41611 (size: 23.5 KB, free: 366.3 MB)
-Finished task 0.0 in stage 0.0 (TID 0) in 1027 ms on 127.0.0.1 (executor 0) (1/1)
+Added broadcast_1_piece0 in memory on 127.0.0.1:46159 (size: 7.8 KB, free: 366.3 MB)
+Added broadcast_0_piece0 in memory on 127.0.0.1:46159 (size: 23.5 KB, free: 366.3 MB)
+Finished task 0.0 in stage 0.0 (TID 0) in 940 ms on 127.0.0.1 (executor 0) (1/1)
 Removed TaskSet 0.0, whose tasks have all completed, from pool 
-ResultStage 0 (collect at /home/max/Work/thirdwave/zest/sparketl/spark-etl-test/models/data/sources.py:39) finished in 1.035 s
-Job 0 finished: collect at /home/max/Work/thirdwave/zest/sparketl/spark-etl-test/models/data/sources.py:39, took 1.095693 s
+ResultStage 0 (collect at /home/max/Work/thirdwave/zest/sparketl/spark-etl-test/models/data/sources.py:39) finished in 0.948 s
+Job 0 finished: collect at /home/max/Work/thirdwave/zest/sparketl/spark-etl-test/models/data/sources.py:39, took 1.010077 s
 Invoking stop() from shutdown hook
 Stopped Spark web UI at http://10.120.50.91:4040
 Shutting down all executors
@@ -80,5 +80,5 @@ BlockManagerMaster stopped
 OutputCommitCoordinator stopped!
 Successfully stopped SparkContext
 Shutdown hook called
-Deleting directory /tmp/spark-98c0748b-0f64-40a9-a1f3-2d8433a24afd
-Deleting directory /tmp/spark-98c0748b-0f64-40a9-a1f3-2d8433a24afd/pyspark-04e8b8dd-1e93-4bcf-87cb-dca36150da0b
+Deleting directory /tmp/spark-88e1e38c-aa23-4d71-9ff7-81053fe44ccb
+Deleting directory /tmp/spark-88e1e38c-aa23-4d71-9ff7-81053fe44ccb/pyspark-3ea31a67-90eb-438b-9cc1-7458b7b629c2

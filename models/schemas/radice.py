@@ -1,5 +1,8 @@
 from pyspark.sql.types import *
 
+
+"""This is a spark StructType obect that stores the field names for the client"""
+
 eligibility_file = StructType([
     StructField('source_id', StringType()),
     StructField('client_name', StringType()),
