@@ -12,3 +12,4 @@ bin/python*
 metastore_db/
 output/**/failed/*
 output/**/passed/*
+*.pyc
