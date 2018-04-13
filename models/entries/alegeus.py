@@ -10,7 +10,7 @@ class CensusEntry:
         Notes:
 
         Args:
-            entry_dict: dict (same as using **args)
+            entry_dict: dict 
         """
         for key, value in entry_dict.items():
             setattr(self, key, value)

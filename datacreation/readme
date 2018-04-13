@@ -1,0 +1,6 @@
+These files are used to create dummy data for the etl process to use.
+
+The eligibility file is the main file that generates the baseline data. It can be run simply by running "python eligibility_file_generator.py" in the command line and
+the output file will be a text file name "eligibility-sample.txt".
+
+There is a second file in this folder named eligibility update. This file is used to add percentage amout of random field changes to the eligibility text file. It then create another file named "transformed-text-data.txt". This is the file that is then sent to the spark etl process. To run this file simply do "python eligibilityupdate.py" the file will be generated in the same folder.

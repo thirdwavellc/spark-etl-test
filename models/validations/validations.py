@@ -1,3 +1,4 @@
+"""Checks to see if the validator has any error from the entry"""
 import os, sys
 import time
 from validate_email import validate_email
@@ -5,24 +6,44 @@ import datetime
 import zipcodes
 
 class ValidationResult:
+    """The Validation result object is what is returned from the validation functionsselfself.
+    The status is set to passed when the validation is passed and failed when the validation is failed."""
     def __init__(self, status,field_value,field_name, error=''):
 
+        """
+        Args:
+            status = str
+            field_value: str
+            field_name: str
+            error: str
+        """
         self.field_value = field_value
         self.field_name = field_name
         self.status = status
         self.error = error
 
     def passed(self):
+        """Sets the validation result object to passed.
+        Args:
+            None
+        Returns:
+            None
+        """
         self.status == 'passed'
 
     def failed(self):
+        """Sets the validation result object to failed.
+        Args:
+            None
+        Returns:
+            None
+        """
         self.status == 'failed'
 
 class Validator:
+    """This object takes an custom entry object and an array of validation to perform on the entry"""
     def __init__(self, entry, entries, validations=[]):
-        """This object takes an custom entry object and an array of validation to perform on the entry
-
-        Note:
+        """
 
         Args:
             entry: Custom Entry Object (Ex.EligibilityEntry, CensusEntry)
@@ -116,6 +137,14 @@ def valid_ssn(field_value,field_name):
 
 
 def valid_first_name(field_value,field_name):
+    """Validates the first name by checking for empty spacing, making sure it's title case and that is only contains alpha characters
+
+    Args:
+        field_value:str
+        field_name:str
+    Returns:
+        returns Validation Result Object
+    """
     try:
         if(no_spaces(field_value) and title_case(field_value) and field_value.isalpha()):
             return ValidationResult('passed',field_value,field_name)
@@ -126,6 +155,14 @@ def valid_first_name(field_value,field_name):
 
 
 def valid_last_name(field_value,field_name):
+    """Validates the last name by checking for empty spacing, making sure it's title case and that is only contains alpha characters
+
+    Args:
+        field_value:str
+        field_name:str
+    Returns:
+        returns Validation Result Object
+    """
     try:
         if(no_spaces(field_value) and title_case(field_value) and field_value.isalpha()):
             return ValidationResult('passed',field_value,field_name)
@@ -136,6 +173,14 @@ def valid_last_name(field_value,field_name):
 
 
 def valid_email(field_value,field_name):
+    """Validates the email by using the validate_email python library and checks that there are not spaces.
+
+    Args:
+        field_value:str
+        field_name:str
+    Returns:
+        returns Validation Result Object
+    """
     if (validate_email(field_value) and no_spaces(field_value)):
         return ValidationResult( 'passed',field_value,field_name)
 
@@ -144,6 +189,14 @@ def valid_email(field_value,field_name):
 
 
 def valid_zip(field_value,field_name):
+    """Validates the zip code by using the python zipcodes library.
+
+    Args:
+        field_value:str
+        field_name:str
+    Returns:
+        returns Validation Result Object
+    """
     try:
         zip_code_normal = zipcodes.matching(field_value)
 
@@ -154,6 +207,14 @@ def valid_zip(field_value,field_name):
 
 
 def valid_state(field_value,field_name):
+    """Validates the state by making sure it is only 2 characters in length and that both characters are alphabetic.
+
+    Args:
+        field_value:str
+        field_name:str
+    Returns:
+        returns Validation Result Object
+    """
     attribute = field_value
     if(len(attribute)==2 and attribute.isupper()):
         return ValidationResult('passed',field_value,field_name)
@@ -162,6 +223,15 @@ def valid_state(field_value,field_name):
 
 
 def not_orphaned(entry, entries,rel_to_subscriber):
+    """Checks to see of the entry has a parent subsciber. (Ex. a entry cannot be valid if they have a plan but no connecting member that works for the client company)
+
+    Args:
+        entry: Entry object
+        entries: array of Entry objects
+        rel_to_subscriber: str
+    Returns:
+        returns Validation Result Object
+    """
     not_orphan=False
     for entry_other in entries:
         if ((entry.ins_subscriber_id == entry_other.ins_subscriber_id) and (entry_other.rel_to_subscriber =="0")):
@@ -176,12 +246,26 @@ def not_orphaned(entry, entries,rel_to_subscriber):
 
 #General functions
 def valid_date_format(date):
+    """Validates a general date by making sure it is 8 digits long, are only digits and the year can only contain a 2 or 1 in the front (to exlude 0123,3000,4000)
+
+    Args:
+        date:str
+    Returns:
+        returns Boolean
+    """
     if (len(date)==8 and date.isdigit() and (date[0]=="2" or date[0]=="1")):
         return True
     else:
         return False
 
 def no_spaces(field):
+    """Validates that there are no spaces in a string
+
+    Args:
+        field:str
+    Returns:
+        returns Boolean
+    """
     if (' ' in field) == True:
         return(False)
     else:
@@ -189,6 +273,12 @@ def no_spaces(field):
 
 
 def title_case(field):
+    """Validates that as sting is title case
+    Args:
+        field:str
+    Returns:
+        returns Boolean
+    """
     if (field.istitle()):
         return(True)
     else:
@@ -196,6 +286,14 @@ def title_case(field):
 
 
 def is_greater_than(field,notgreaterthanthis):
+    """Validates that a field length is not greater than the notgreaterthanthis value.
+
+    Args:
+        field:str
+        notgreaterthanthis: int
+    Returns:
+        returns Boolean
+    """
     if len(field) > notgreaterthanthis:
         return(False)
     else:

@@ -16,7 +16,7 @@ from faker import Faker
 import numpy as np
 import os, sys
 fake = Faker()
-import eligibility_file_generator as fg
+#import eligibility_file_generator as fg
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from models.schemas.radice import eligibility_file
@@ -43,37 +43,20 @@ def random_delete_entry(input_file):
 
 
 def random_file_update(input_file):
-    updated_attributes = {"last_name": fake.last_name() ,"first_name": fake.first_name() ,"email": fake.email(), "city": fake.city(), "state": fake.state(), "zip_code": fg.add_alpha_char(50,fake.zipcode()),
+    updated_attributes = {"last_name": fake.last_name() ,"first_name": fake.first_name() ,"email": fake.email(), "city": fake.city(), "state": fake.state(), "zip_code": fake.zipcode(),
      "address_line_1": fake.street_address(),}
     updated_attributes_array = ["last_name","first_name","email","city","state","zip_code","address_line_1"]
-
-    spark_session = SparkSession\
-        .builder\
-        .appName("PySparkEligibiltyFile")\
-        .getOrCreate()
-
-    df = spark_session.read \
-                    .format("CSV") \
-                    .schema(eligibility_file) \
-                    .option("header", "false") \
-                    .option("delimiter", "|") \
-                    .option("treatEmptyValuesAsNulls", "true") \
-                    .load(input_file) \
-
-
-
-
-    rows = df.collect()
-    for row in rows:
+    df = pandas.DataFrame(pandas.read_csv("eligibility-sample.txt",sep="|",header=None,names=eligibility_file.fieldNames(),dtype=str))
+    for index, row in df.iterrows():
         random_attribute = np.random.choice(updated_attributes_array)
         random_chance = random.randint(1, 100)
         if random_chance<=100:
-            if(row[random_attribute]!= None):
-
-                df2 = df.na.replace(row[random_attribute],updated_attributes[random_attribute],random_attribute)
+            df.loc[index,random_attribute]=updated_attributes[random_attribute]
 
 
-    df2.write.csv("csv",sep="|")
+
+
+    df.to_csv('transformed-test-data.txt',header=None,sep="|",index=False)
 
 
 
