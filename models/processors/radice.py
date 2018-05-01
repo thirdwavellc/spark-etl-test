@@ -9,7 +9,7 @@ class RadiceEtlProcessor(EtlProcessor):
 
     def __init__(self, data_source):
         self.entries = list(map(lambda row: EligibilityEntry(row.asDict()), data_source.to_row_list()))
-        
+
         self.normalizations = [
             [norm.normalize_date_of_birth, "date_of_birth"],
             [norm.normalize_coverage_start_date, "coverage_start_date"],
@@ -17,7 +17,7 @@ class RadiceEtlProcessor(EtlProcessor):
             [norm.normalize_first_name, "first_name"],
             [norm.normalize_last_name, "last_name"],
             [norm.normalize_email, "email"],
-            [norm.normalize_zip, "zip_code"],
+            #[norm.normalize_zip, "zip_code"],
             [norm.normalize_state, "state"]
         ]
 

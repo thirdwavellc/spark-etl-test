@@ -18,7 +18,7 @@ class EligibilityExporter:
             file_writer: filedatawriter object
         """
 
-        self.entries_dic = list(map(lambda validator: [validator.entry.__dict__,{"errors":validator.errors}], entries))
+        self.entries_dic = list(map(lambda validator: validator.entry.__dict__, entries))
         self.content = json.dumps(self.entries_dic, indent=2)
         self.file_writer = file_writer
 
