@@ -86,7 +86,7 @@ class Validator:
         orphan_validation = not_orphaned(self.entry,self.entries,self.entry.rel_to_subscriber)
         validation_results.append(orphan_validation)
         failed_validations = list(filter(lambda validation: validation.status =="failed", validation_results))
-        self.errors =  list(map(lambda failed_validation: [failed_validation.field_name,failed_validation.field_value,failed_validation.error],failed_validations))
+        self.errors =  list(map(lambda failed_validation: {"field_name":failed_validation.field_name,"field_value":failed_validation.field_value,"error":failed_validation.error},failed_validations))
         return self
 
 

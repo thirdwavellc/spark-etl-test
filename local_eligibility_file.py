@@ -23,17 +23,16 @@ def main():
                         .getOrCreate()
 
     file_dir = os.path.dirname(__file__)
-    data_file = os.path.join(file_dir, 'eligibility-sample.txt')
+    data_file = os.path.join(file_dir, 'eligibility-sample-small.txt')
 
     data_source = LocalFileSparkDataSource(spark_session, schemas.eligibility_file, data_file)
 
     etl_process = RadiceEtlProcessor(data_source)
     etl_process.process()
+
     exporters = [
         EligibilityExporter(etl_process.valid_entries, LocalFileDataWriter('output/radice/yaro/passed/data.json')),
         EligibilityExporter(etl_process.invalid_entries, LocalFileDataWriter('output/radice/yaro/failed/data.json')),
-        CensusExporter(etl_process.valid_entries, LocalCsvWriter('output/radice/alegeus/passed/data.csv')),
-        CensusExporter(etl_process.invalid_entries, LocalCsvWriter('output/radice/alegeus/failed/data.csv'))
     ]
     etl_process.export(exporters)
 

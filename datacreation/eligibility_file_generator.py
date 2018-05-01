@@ -316,7 +316,12 @@ class Member:
         self.member_id = '' if self.subscriber.group.client.uses_ssn else self.subscriber.ins_subscriber_id + ' ' + subscriber_num
 
         mail_extension = np.random.choice(["@gmail.com","@yahoo.com","@hotmail.com","@aol.com"])
+        email_storage = []
         self.email = add_random_space(2, self.first_name+ self.original_last_name + mail_extension)
+        email_storage.append(self.email)
+        if self.email in email_storage:
+            self.email = fake.email()
+        email_storage.append(self.email)
         self.address_line_1 = fake.street_address() if self.is_employee() else ''
         self.address_line_2 = fake.secondary_address() if self.is_employee() and percent_chance(30) else ''
         self.city = fake.city() if self.is_employee() else ''
