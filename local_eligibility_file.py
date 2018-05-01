@@ -23,14 +23,9 @@ def main():
                         .getOrCreate()
 
     file_dir = os.path.dirname(__file__)
-    data_file = os.path.join(file_dir, 'test-data.csv')
+    data_file = os.path.join(file_dir, 'eligibility-sample.txt')
 
     data_source = LocalFileSparkDataSource(spark_session, schemas.eligibility_file, data_file)
-    sftp_hostname = 'ec2-34-206-40-147.compute-1.amazonaws.com'
-    sftp_user = 'radice'
-    key_path = os.path.join("/home/max/Downloads/", 'radice-sftp.pem')
-    sftp_connection = SftpConnection(sftp_hostname, sftp_user, key_path)
-
 
     etl_process = RadiceEtlProcessor(data_source)
     etl_process.process()

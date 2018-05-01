@@ -101,7 +101,7 @@ class EligibilityFile:
         eligibility_file.close()
 
 class Client:
-    def __init__(self, num_groups=250, num_subscribers=15000, min_group_size=5, max_group_size=500, uses_ssn=False):
+    def __init__(self, num_groups=250, num_subscribers=15000, min_group_size=5, max_group_size=500, uses_ssn=False, name='Radice', source_id='RADICE'):
         """The client object has many members. The members were divided into groups because we thought that the client might have grouped there members into groups for organizationself,
         however we me find this may not be the case.
 
@@ -121,8 +121,8 @@ class Client:
         self.min_group_size = min_group_size
         self.max_group_size = max_group_size
         self.uses_ssn = uses_ssn
-        self.client_name = fake.company()
-        self.source_id = self.client_name.split(' ')[0].replace(',', '')
+        self.client_name = name
+        self.source_id = source_id
         self.groups = []
         self.generate_groups()
 
@@ -181,7 +181,7 @@ class Group:
 
         """
         self.client = client
-        self.group_number = fake.ean(length=8) if percent_chance(50) else ''
+        self.group_number = fake.ean(length=8)
         self.subscribers = []
         self.generate_subscribers(num_subscribers)
 
@@ -374,7 +374,7 @@ class Member:
         ]) + '\n'
 
 
-sample_client = Client(num_groups=25, num_subscribers=1500, uses_ssn=False)
+sample_client = Client(num_groups=25, num_subscribers=15000, uses_ssn=False)
 sample_eligibility_file = EligibilityFile(sample_client)
 
 sample_eligibility_file.write('eligibility-sample.txt')
