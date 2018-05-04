@@ -165,9 +165,9 @@ class Client:
 
 class Group:
 
-    PLANS = [['HumanaHMO', fake.ean(length=8)],
-             ['HumanaHDHP 08', fake.ean(length=8)],
-             ['Humana ChoicePOS 080', fake.ean(length=8)]]
+    PLANS = [['HumanaHMO', '85945180'],
+             ['HumanaHDHP 08','58330876'],
+             ['Humana ChoicePOS 080','99610784']]
 
     def __init__(self, client, num_subscribers):
         """Gets the total members that the clients has by adding up the total members in each group.
@@ -216,7 +216,7 @@ class Group:
 
         while self.total_members() < num_subscribers:
             self.subscribers.append(Subscriber(self))
-            ## TODO: Need to remove
+            ## TODO: Need to fix how records are duplicated this way duplicates subscriber info but the Member info changes and is not the same.
             #random_number = random.randint(0, 99)
             #if random_number <=1:
             #    self.subscribers.append(Subscriber(self))
