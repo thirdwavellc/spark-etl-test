@@ -215,7 +215,14 @@ class Group:
         email_storage = []
 
         while self.total_members() < num_subscribers:
-            self.subscribers.append(Subscriber(self))
+            emails =[]
+            subscriber = Subscriber(self)
+            if subscriber.employee.email in emails:
+                subscriber.employee.email = fake.email()
+            emails.append(subscriber.employee.email)
+
+            self.subscribers.append(subscriber)
+
             ## TODO: Need to fix how records are duplicated this way duplicates subscriber info but the Member info changes and is not the same.
             #random_number = random.randint(0, 99)
             #if random_number <=1:
@@ -223,7 +230,7 @@ class Group:
             #    self.subscribers.append(Subscriber(self))
             #else:
 
-
+        
 # TODO: include new enrollment year records
 
 class Subscriber:
@@ -320,12 +327,7 @@ class Member:
         self.member_id = '' if self.subscriber.group.client.uses_ssn else self.subscriber.ins_subscriber_id + ' ' + subscriber_num
 
         mail_extension = np.random.choice(["@gmail.com","@yahoo.com","@hotmail.com","@aol.com"])
-        email_storage = []
         self.email = add_random_space(2, self.first_name+ self.original_last_name + mail_extension)
-        email_storage.append(self.email)
-        if self.email in email_storage:
-            self.email = fake.email()
-        email_storage.append(self.email)
         self.address_line_1 = fake.street_address() if self.is_employee() else ''
         self.address_line_2 = fake.secondary_address() if self.is_employee() and percent_chance(30) else ''
         self.city = fake.city() if self.is_employee() else ''
