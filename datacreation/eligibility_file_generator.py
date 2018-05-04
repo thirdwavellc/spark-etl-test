@@ -9,6 +9,8 @@ import numpy as np
 
 now = datetime.datetime.now()
 fake = Faker()
+emails = []
+count = 0
 
 def percent_chance(percent):
     """Returns true or false if the randome number choosen is less that in input. Ex if you input 10 there is a 10 percent chance that the function returns true.
@@ -212,15 +214,9 @@ class Group:
             Array of subscibers
 
         """
-        email_storage = []
 
         while self.total_members() < num_subscribers:
-            emails =[]
             subscriber = Subscriber(self)
-            if subscriber.employee.email in emails:
-                subscriber.employee.email = fake.email()
-            emails.append(subscriber.employee.email)
-
             self.subscribers.append(subscriber)
 
             ## TODO: Need to fix how records are duplicated this way duplicates subscriber info but the Member info changes and is not the same.
@@ -230,7 +226,7 @@ class Group:
             #    self.subscribers.append(Subscriber(self))
             #else:
 
-        
+
 # TODO: include new enrollment year records
 
 class Subscriber:
@@ -260,6 +256,7 @@ class Subscriber:
         self.dependants = self.generate_dependants()
         self.members = [self.employee] + self.dependants
 
+
     def total_members(self):
         """Returns the total number of members. This is the subsciber plus any dependants
 
@@ -281,17 +278,20 @@ class Subscriber:
         Return:
             An array of members
         """
-        eflist  = np.random.choice([[Member(self, 1, '002'), Member(self, 2, '003')],[Member(self, 1, '002'), Member(self, 2, '003'),Member(self, 2, '004')],
-        [Member(self, 1, '002'), Member(self, 2, '003'),Member(self, 2, '004'),Member(self, 2, '005')],[Member(self, 1, '002'), Member(self, 2, '003'),Member(self, 2, '004'),Member(self, 2, '005'),
-        Member(self, 2, '006')]],1,p=[.40,.34,.16,.10])[0]
+        member2 = Member(self, 1, '002')
+        member3 = Member(self, 2, '003')
+        member4 = Member(self, 2, '004')
+        member5 = Member(self, 2, '005')
+        member6 = Member(self, 2, '006')
+        member22 =  Member(self, 2, '002')
 
-        return {
-            'EO': [],
-            'ES': [Member(self, 1, '002')],
-            'EC': [Member(self, 2, '002')],
-            'EF': eflist
 
-        }[self.coverage_level]
+        eflist  = np.random.choice([[member2, member3],[member2, member3,member4],
+        [member2, member3,member4,member5],[member2, member3,member4,member5,member6]],1,p=[.40,.34,.16,.10])[0]
+
+        rand_choice = {'EO': [],'ES': [member2],'EC': [member22],'EF': eflist}[self.coverage_level]
+
+        return rand_choice
 
 
 
@@ -328,6 +328,11 @@ class Member:
 
         mail_extension = np.random.choice(["@gmail.com","@yahoo.com","@hotmail.com","@aol.com"])
         self.email = add_random_space(2, self.first_name+ self.original_last_name + mail_extension)
+        global count
+        if self.email in emails:
+            count = count + 1
+            self.email = self.email + str(count)
+        emails.append(self.email)
         self.address_line_1 = fake.street_address() if self.is_employee() else ''
         self.address_line_2 = fake.secondary_address() if self.is_employee() and percent_chance(30) else ''
         self.city = fake.city() if self.is_employee() else ''
