@@ -212,13 +212,17 @@ class Group:
             Array of subscibers
 
         """
+        email_storage = []
+
         while self.total_members() < num_subscribers:
-            random_number = random.randint(0, 99)
-            if random_number <=1:
-                self.subscribers.append(Subscriber(self))
-                self.subscribers.append(Subscriber(self))
-            else:
-                self.subscribers.append(Subscriber(self))
+            self.subscribers.append(Subscriber(self))
+            ## TODO: Need to remove
+            #random_number = random.randint(0, 99)
+            #if random_number <=1:
+            #    self.subscribers.append(Subscriber(self))
+            #    self.subscribers.append(Subscriber(self))
+            #else:
+
 
 # TODO: include new enrollment year records
 
