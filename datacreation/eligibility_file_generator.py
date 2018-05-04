@@ -329,6 +329,7 @@ class Member:
         mail_extension = np.random.choice(["@gmail.com","@yahoo.com","@hotmail.com","@aol.com"])
         self.email = add_random_space(2, self.first_name+ self.original_last_name + mail_extension)
         global count
+        global emails
         if self.email in emails:
             count = count + 1
             self.email = self.email + str(count)
