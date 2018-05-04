@@ -26,5 +26,5 @@ class RadiceEtlProcessor(EtlProcessor):
             #[valid.valid_ssn, "member_ssn"],
             [valid.valid_first_name, "first_name"],
             [valid.valid_last_name, "last_name"],
-            [valid.valid_email, "email"]
+            #[valid.valid_email, "email"]
         ]
