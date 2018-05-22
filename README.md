@@ -34,13 +34,13 @@ Once you have [Spark][Spark] downloaded/unzipped, you can use the following scri
 the master and worker processes:
 
 ```bash
-$ bin/start
+$ bin/start.sh
 ```
 
 To stop the processes, you can use the following script:
 
 ```bash
-$ bin/stop
+$ bin/stop.sh
 ```
 
 The [Spark][Spark] Master UI is available at
