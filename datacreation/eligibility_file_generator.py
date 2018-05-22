@@ -347,10 +347,10 @@ class Member:
         mail_extension = np.random.choice(["@gmail.com","@yahoo.com","@hotmail.com","@aol.com"])
         email = self.first_name + self.last_name + mail_extension
         if email in emails:
-            print("Duplicate email found: {0}".format(email))
+        #    print("Duplicate email found: {0}".format(email))
             count = count + 1
             email = email + str(count)
-            print("Changing email to: {0}".format(email))
+        #    print("Changing email to: {0}".format(email))
             return email
         else:
             emails.append(email)
