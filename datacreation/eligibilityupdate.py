@@ -42,7 +42,7 @@ def random_file_update(input_file):
 
     #remove a random entries
 
-    for index, row in df.iterorw():
+    for index, row in df.iterrows():
         random_chance = random.randint(1,100)
         random_entries = []
         if random_chance < 1:
