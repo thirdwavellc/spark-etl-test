@@ -7,5 +7,4 @@ pandas
 validate_email
 datetime
 paramiko
-collections
 zipcodes
