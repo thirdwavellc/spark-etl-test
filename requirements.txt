@@ -1,4 +1,10 @@
+virtualenv
+virtualenvwrapper
 faker
+numpy
+pyspark
+pandas
+validate_email
 datetime
 paramiko
 collections
