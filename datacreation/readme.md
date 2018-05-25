@@ -15,15 +15,16 @@ the file will be generated in the same folder.
 
 ###Install Notes (mac):
 
-sudo easy_install pip
-pip3 install virtualenv
-pip3 install virtualenvwrapper
-pip3 install faker
-pip3 install numpy
-pip3 install pyspark
-pip3 install pandas
-pip3 install validate_email
-pip3 install zipcodes
-pip3 install paramiko
+    sudo easy_install pip
+    
+    pip3 install virtualenv
+    pip3 install virtualenvwrapper
+    pip3 install faker
+    pip3 install numpy
+    pip3 install pyspark
+    pip3 install pandas
+    pip3 install validate_email
+    pip3 install zipcodes
+    pip3 install paramiko
 
 https://stackoverflow.com/questions/30518362/how-do-i-set-the-drivers-python-version-in-spark
