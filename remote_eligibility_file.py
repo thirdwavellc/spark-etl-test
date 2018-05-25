@@ -3,7 +3,6 @@ from models.processors.radice import RadiceEtlProcessor
 from models.data.sources import SftpConnection, SftpSparkDataSource
 import models.schemas.radice as schemas
 from models.exporters.yaro import EligibilityExporter
-from models.exporters.alegeus import CensusExporter
 from models.data.destinations import LocalFileDataWriter, RemoteFileDataWriter, LocalCsvWriter
 from pyspark.sql.types import *
 from pyspark.sql import SparkSession
