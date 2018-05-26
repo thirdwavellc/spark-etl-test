@@ -1,4 +1,5 @@
-###Running
+## Running
+
 These files are used to create dummy data for the etl process to use.
 
 The eligibility file is the main file that generates the baseline data. It can be run simply by running
@@ -13,18 +14,18 @@ There is a second file in this folder named eligibility update. This file is use
 
 the file will be generated in the same folder.
 
-###Install Notes (mac):
+## Install Notes (mac):
 
     sudo easy_install pip
+    pip install -r requirements.txt
     
-    pip3 install virtualenv
-    pip3 install virtualenvwrapper
-    pip3 install faker
-    pip3 install numpy
-    pip3 install pyspark
-    pip3 install pandas
-    pip3 install validate_email
-    pip3 install zipcodes
-    pip3 install paramiko
+## Configuration
 
+You will need to ensure that python3 is used as the runner for spark. Inside the downloaded Spark server,
+add the following settings at the end of the conf/spark-env.sh file ( create this file from the template if necessary) 
+
+    PYSPARK_PYTHON=python3 
+    PYSPARK_DRIVER_PYTHON=python3
+
+More information here:
 https://stackoverflow.com/questions/30518362/how-do-i-set-the-drivers-python-version-in-spark
