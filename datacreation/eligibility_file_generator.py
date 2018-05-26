@@ -13,7 +13,7 @@ emails = []
 count = 0
 
 def percent_chance(percent):
-    """Returns true or false if the randome number choosen is less that in input. Ex if you input 10 there is a 10 percent chance that the function returns true.
+    """Returns true or false if the random number choosen is less that in input. Ex if you input 10 there is a 10 percent chance that the function returns true.
 
     Args:
         percent:int
