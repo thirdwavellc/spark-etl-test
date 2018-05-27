@@ -167,9 +167,10 @@ class Client:
 
 class Group:
 
-    PLANS = [['HumanaHMO', '85945180'],
-             ['HumanaHDHP 08','58330876'],
-             ['Humana ChoicePOS 080','99610784']]
+    ##TODO limiting this to just one plan for now for demo purposeds
+    PLANS = [['HumanaHMO', 'YRODEMO']]
+    #         ['HumanaHDHP 08','YRODEMO2'],
+    #         ['Humana ChoicePOS 080','99610784']]
 
     def __init__(self, client, num_subscribers):
         """Gets the total members that the clients has by adding up the total members in each group.
@@ -402,5 +403,4 @@ sample_eligibility_file = EligibilityFile(sample_client)
 
 sample_eligibility_file.write('eligibility-sample.txt')
 
-print("Total Emails: {0}".format(len(emails)))
 print("Counter: {0}".format(count))
