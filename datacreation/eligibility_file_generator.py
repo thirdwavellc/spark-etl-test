@@ -324,7 +324,18 @@ class Member:
         self.ssn = fake.ssn() if self.subscriber.group.client.uses_ssn else ''
         self.member_id = '' if self.subscriber.group.client.uses_ssn else self.subscriber.ins_subscriber_id + ' ' + subscriber_num
 
+<<<<<<< HEAD
         self.email = self.generate_email() if self.is_employee() else ''
+=======
+        mail_extension = np.random.choice(["@gmail.com","@yahoo.com","@hotmail.com","@aol.com"])
+        self.email = add_random_space(2, self.first_name+ self.original_last_name + mail_extension)
+        global count
+        global emails
+        if self.email in emails:
+            count = count + 1
+            self.email = self.email + str(count)
+        emails.append(self.email)
+>>>>>>> 85ad71da98077c752060f09a09e8c876b1d58c84
         self.address_line_1 = fake.street_address() if self.is_employee() else ''
         self.address_line_2 = fake.secondary_address() if self.is_employee() and percent_chance(30) else ''
         self.city = fake.city() if self.is_employee() else ''
