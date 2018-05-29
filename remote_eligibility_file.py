@@ -21,9 +21,12 @@ def main():
     key_path = os.path.join(Path.home(), 'radice-sftp.pem')
     sftp_connection = SftpConnection(sftp_hostname, sftp_user, key_path)
 
-    file_name = '/uploads/radice/eligibility-sample.txt'
-    data_source = SftpSparkDataSource(spark_session, schemas.eligibility_file, sftp_connection, file_name)
+##TODO Commented this read in locally for now since we are not pulling the eligibility file from a real source right now and just showing
+## how we are working with our dummy data.
+    #file_name = '/uploads/radice/eligibility-sample.txt'
+    #data_source = SftpSparkDataSource(spark_session, schemas.eligibility_file, sftp_connection, file_name)
 
+    data_source = '/datacreation/eligibility-sample.txt'
     etl_process = RadiceEtlProcessor(data_source)
     etl_process.process()
     exporters = [
@@ -31,8 +34,6 @@ def main():
         EligibilityExporter(etl_process.invalid_entries, LocalFileDataWriter('output/radice/yaro/failed/data.json')),
         EligibilityExporter(etl_process.valid_entries, RemoteFileDataWriter(sftp_connection.connection,'uploads/radice/passed/data.json')),
         EligibilityExporter(etl_process.invalid_entries, RemoteFileDataWriter(sftp_connection.connection,'uploads/radice/failed/data.json')),
-        CensusExporter(etl_process.valid_entries, LocalCsvWriter('output/radice/alegeus/passed/data.csv')),
-        CensusExporter(etl_process.invalid_entries, LocalCsvWriter('output/radice/alegeus/failed/data.csv')),
 
     ]
     etl_process.export(exporters)

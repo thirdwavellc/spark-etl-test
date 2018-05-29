@@ -167,9 +167,10 @@ class Client:
 
 class Group:
 
-    PLANS = [['HumanaHMO', '85945180'],
-             ['HumanaHDHP 08','58330876'],
-             ['Humana ChoicePOS 080','99610784']]
+    ##TODO limiting this to just one plan for now for demo purposeds
+    PLANS = [['HumanaHMO', 'YRODEMO']]
+    #         ['HumanaHDHP 08','YRODEMO2'],
+    #         ['Humana ChoicePOS 080','99610784']]
 
     def __init__(self, client, num_subscribers):
         """Gets the total members that the clients has by adding up the total members in each group.
@@ -323,7 +324,18 @@ class Member:
         self.ssn = fake.ssn() if self.subscriber.group.client.uses_ssn else ''
         self.member_id = '' if self.subscriber.group.client.uses_ssn else self.subscriber.ins_subscriber_id + ' ' + subscriber_num
 
+<<<<<<< HEAD
         self.email = self.generate_email() if self.is_employee() else ''
+=======
+        mail_extension = np.random.choice(["@gmail.com","@yahoo.com","@hotmail.com","@aol.com"])
+        self.email = add_random_space(2, self.first_name+ self.original_last_name + mail_extension)
+        global count
+        global emails
+        if self.email in emails:
+            count = count + 1
+            self.email = self.email + str(count)
+        emails.append(self.email)
+>>>>>>> 85ad71da98077c752060f09a09e8c876b1d58c84
         self.address_line_1 = fake.street_address() if self.is_employee() else ''
         self.address_line_2 = fake.secondary_address() if self.is_employee() and percent_chance(30) else ''
         self.city = fake.city() if self.is_employee() else ''
@@ -347,10 +359,10 @@ class Member:
         mail_extension = np.random.choice(["@gmail.com","@yahoo.com","@hotmail.com","@aol.com"])
         email = self.first_name + self.last_name + mail_extension
         if email in emails:
-            print("Duplicate email found: {0}".format(email))
+        #    print("Duplicate email found: {0}".format(email))
             count = count + 1
             email = email + str(count)
-            print("Changing email to: {0}".format(email))
+        #    print("Changing email to: {0}".format(email))
             return email
         else:
             emails.append(email)
@@ -402,5 +414,4 @@ sample_eligibility_file = EligibilityFile(sample_client)
 
 sample_eligibility_file.write('eligibility-sample.txt')
 
-print("Total Emails: {0}".format(len(emails)))
 print("Counter: {0}".format(count))

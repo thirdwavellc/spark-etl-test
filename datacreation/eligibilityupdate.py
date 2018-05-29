@@ -40,12 +40,14 @@ def random_file_update(input_file):
         if random_chance<=10:
             df.loc[index,random_attribute]=updated_attributes[random_attribute]
 
-    #remove a random entries
+    #remove a random fields in the rows
 
     for index, row in df.iterrows():
         random_chance = random.randint(1,100)
         random_entries = []
-        if random_chance < 1:
+        print(index)
+        print(row)
+        if random_chance < 50:
             random_entries.append(index)
 
     for random_entry in random_entries:

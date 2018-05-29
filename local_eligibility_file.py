@@ -22,7 +22,7 @@ def main():
                         .getOrCreate()
 
     file_dir = os.path.dirname(__file__)
-    data_file = os.path.join(file_dir, 'eligibility-sample.txt')
+    data_file = os.path.join(file_dir, 'datacreation/eligibility-sample.txt')
 
     data_source = LocalFileSparkDataSource(spark_session, schemas.eligibility_file, data_file)
 
