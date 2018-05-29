@@ -168,7 +168,7 @@ class Client:
 class Group:
 
     ##TODO limiting this to just one plan for now for demo purposeds
-    PLANS = [['HumanaHMO', 'YRODEMO']]
+    PLANS = [['HumanaHMO', 'FSA123']]
     #         ['HumanaHDHP 08','YRODEMO2'],
     #         ['Humana ChoicePOS 080','99610784']]
 
@@ -184,7 +184,8 @@ class Group:
 
         """
         self.client = client
-        self.group_number = fake.ean(length=8)
+        ## TODO: added this for demo purposes
+        self.group_number = "YRODEMO"
         self.subscribers = []
         self.generate_subscribers(num_subscribers)
 
@@ -250,6 +251,7 @@ class Subscriber:
         self.plan = random.choice(self.group.PLANS)
         self.plan_id = self.plan[1]
         self.plan_name = self.plan[0]
+        ### TODO: changed for demo to match plan data
         self.coverage_start_date = fake.date_between(start_date='-9m', end_date='+3m').replace(day=1)
         self.coverage_end_date = self.coverage_start_date.replace(year=self.coverage_start_date.year + 1, month=self.coverage_start_date.month - 1, day=1)
         self.coverage_status = self.coverage_start_date <= now.date() <= self.coverage_end_date
@@ -324,18 +326,7 @@ class Member:
         self.ssn = fake.ssn() if self.subscriber.group.client.uses_ssn else ''
         self.member_id = '' if self.subscriber.group.client.uses_ssn else self.subscriber.ins_subscriber_id + ' ' + subscriber_num
 
-<<<<<<< HEAD
         self.email = self.generate_email() if self.is_employee() else ''
-=======
-        mail_extension = np.random.choice(["@gmail.com","@yahoo.com","@hotmail.com","@aol.com"])
-        self.email = add_random_space(2, self.first_name+ self.original_last_name + mail_extension)
-        global count
-        global emails
-        if self.email in emails:
-            count = count + 1
-            self.email = self.email + str(count)
-        emails.append(self.email)
->>>>>>> 85ad71da98077c752060f09a09e8c876b1d58c84
         self.address_line_1 = fake.street_address() if self.is_employee() else ''
         self.address_line_2 = fake.secondary_address() if self.is_employee() and percent_chance(30) else ''
         self.city = fake.city() if self.is_employee() else ''
