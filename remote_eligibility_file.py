@@ -21,12 +21,10 @@ def main():
     key_path = os.path.join(Path.home(), 'radice-sftp.pem')
     sftp_connection = SftpConnection(sftp_hostname, sftp_user, key_path)
 
-##TODO Commented this read in locally for now since we are not pulling the eligibility file from a real source right now and just showing
-## how we are working with our dummy data.
-    #file_name = '/uploads/radice/eligibility-sample.txt'
-    #data_source = SftpSparkDataSource(spark_session, schemas.eligibility_file, sftp_connection, file_name)
+    file_name = '/uploads/radice/eligibility-sample.txt'
+    data_source = SftpSparkDataSource(spark_session, schemas.eligibility_file, sftp_connection, file_name)
 
-    data_source = '/datacreation/eligibility-sample.txt'
+    #data_source = '/datacreation/eligibility-sample.txt'
     etl_process = RadiceEtlProcessor(data_source)
     etl_process.process()
     exporters = [
