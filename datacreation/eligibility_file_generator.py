@@ -13,7 +13,7 @@ emails = []
 count = 0
 
 def percent_chance(percent):
-    """Returns true or false if the randome number choosen is less that in input. Ex if you input 10 there is a 10 percent chance that the function returns true.
+    """Returns true or false if the random number choosen is less that in input. Ex if you input 10 there is a 10 percent chance that the function returns true.
 
     Args:
         percent:int
@@ -325,7 +325,7 @@ class Member:
         self.gender = 'M' if percent_chance(50) else 'F'
         self.ssn = fake.ssn() if self.subscriber.group.client.uses_ssn else ''
         self.member_id = '' if self.subscriber.group.client.uses_ssn else self.subscriber.ins_subscriber_id + ' ' + subscriber_num
-
+        
         self.email = self.generate_email() if self.is_employee() else ''
         self.address_line_1 = fake.street_address() if self.is_employee() else ''
         self.address_line_2 = fake.secondary_address() if self.is_employee() and percent_chance(30) else ''
@@ -403,6 +403,6 @@ class Member:
 sample_client = Client(num_groups=25, num_subscribers=15000, uses_ssn=False)
 sample_eligibility_file = EligibilityFile(sample_client)
 
-sample_eligibility_file.write('eligibility-sample.txt')
+sample_eligibility_file.write('datacreation/eligibility-sample.txt')
 
 print("Counter: {0}".format(count))

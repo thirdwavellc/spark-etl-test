@@ -1,17 +1,11 @@
 # Spark ETL Test
 
-This repo includes some initial Proof of Concept work on [Spark][Spark] ETL
-jobs for Zest Health.
+This repo includes the [Spark][Spark] ETL jobs for Yaro.
 
 [Spark][Spark] has been selected due to its flexibilty of running standalone as
 an open source package, as well as its integration into the [AWS Glue][AWS
 Glue] service. Out of the box, [Spark][Spark] has bindings for Java, Scala,
 Python, and R.
-
-Microsoft has also created C# bindings in a project called [Mobius][Mobius],
-but it appears to not support .Net Core at the moment:
-  
-  https://github.com/Microsoft/Mobius/issues/666
 
 ## Setup
 
@@ -34,13 +28,13 @@ Once you have [Spark][Spark] downloaded/unzipped, you can use the following scri
 the master and worker processes:
 
 ```bash
-$ bin/start
+$ bin/start.sh
 ```
 
 To stop the processes, you can use the following script:
 
 ```bash
-$ bin/stop
+$ bin/stop.sh
 ```
 
 The [Spark][Spark] Master UI is available at
